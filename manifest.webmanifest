@@ -1,0 +1,17 @@
+{
+  "name": "Instructor Prep — Révision Moniteur Plongée",
+  "short_name": "Instructor Prep",
+  "description": "Application de révision personnelle pour la préparation au monitorat de plongée (parcours SSI) : quiz, fiches mémo et suivi de progression.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#072a4a",
+  "theme_color": "#072a4a",
+  "lang": "fr",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
