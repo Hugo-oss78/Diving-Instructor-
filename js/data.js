@@ -128,7 +128,7 @@ export const QUESTIONS = [
       "Toujours flous, sans effet de taille",
     ],
     correct: 1,
-    explanation: "La réfraction de la lumière entre l'eau et l'air emprisonné dans le masque fait paraître les objets environ 25% plus gros et plus proches — un point important à enseigner aux élèves pour l'estimation des distances.",
+    explanation: "La réfraction de la lumière entre l'eau et l'air emprisonné dans le masque fait paraître les objets environ 25% plus proches et environ 33% plus gros — un point important à enseigner aux élèves pour l'estimation des distances.",
   },
   {
     id: "phy-10", cat: "physique",
@@ -963,6 +963,17 @@ export const MEMO_CARDS = [
       "Les questions de physique/physiologie/matériel reflètent des connaissances générales communes à tous les organismes de plongée.",
       "Pour toute donnée chiffrée précise (ratios, procédures d'examen, tables, standards), réfère-toi TOUJOURS à ton SSI Instructor Manual, à MySSI et à ton Instructor Trainer — ce sont les seules sources qui font foi.",
       "En cas de doute sur un point de sécurité, ne te fie jamais uniquement à cette appli.",
+    ],
+  },
+  {
+    id: "m-sources",
+    cat: "ssi",
+    title: "🔎 Comment ce contenu a été vérifié",
+    bullets: [
+      "Chaque fait de physique/physiologie/sécurité a été recoupé avec au moins 2 sources indépendantes et reconnues : DAN (Divers Alert Network), Merck Manual, NCBI/PubMed, ou sites officiels des organismes de plongée.",
+      "La structure du parcours SSI a été vérifiée sur le site officiel divessi.com et recoupée avec d'autres centres de formation SSI indépendants.",
+      "La liste complète des sources et liens utilisés est dans le fichier SOURCES.md du dépôt du projet.",
+      "Cette vérification réduit fortement le risque d'erreur mais n'a pas été relue par un professionnel de santé de plongée ni un Instructor Trainer SSI — ce n'est pas une garantie absolue.",
     ],
   },
 ];
