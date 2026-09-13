@@ -106,6 +106,79 @@ export const QUESTIONS = [
     explanation: "C'est un point pédagogique classique pour illustrer les dangers de Boyle-Mariotte en remontée non contrôlée, y compris pour la flottabilité du plongeur lui-même.",
   },
 
+  {
+    id: "phy-08", cat: "physique",
+    q: "La loi d'Archimède, qui régit la flottabilité, énonce que :",
+    choices: [
+      "Tout corps plongé dans un fluide subit une poussée verticale vers le haut égale au poids du volume de fluide déplacé",
+      "Le volume d'un gaz est inversement proportionnel à sa pression",
+      "La pression d'un gaz augmente avec la température",
+      "La densité de l'eau diminue avec la profondeur",
+    ],
+    correct: 0,
+    explanation: "C'est le principe physique qui explique pourquoi un plongeur peut être en flottabilité positive, négative ou neutre selon son volume déplacé et son poids.",
+  },
+  {
+    id: "phy-09", cat: "physique",
+    q: "Sous l'eau, à travers un masque, les objets paraissent généralement :",
+    choices: [
+      "Plus petits et plus loin qu'en réalité",
+      "Plus gros et plus proches qu'en réalité (effet de la réfraction)",
+      "De la même taille et à la même distance qu'à l'air libre",
+      "Toujours flous, sans effet de taille",
+    ],
+    correct: 1,
+    explanation: "La réfraction de la lumière entre l'eau et l'air emprisonné dans le masque fait paraître les objets environ 25% plus gros et plus proches — un point important à enseigner aux élèves pour l'estimation des distances.",
+  },
+  {
+    id: "phy-10", cat: "physique",
+    q: "En profondeur, quelle couleur du spectre disparaît en premier à l'œil nu (sans lumière artificielle) ?",
+    choices: [
+      "Le bleu",
+      "Le vert",
+      "Le rouge",
+      "Le jaune",
+    ],
+    correct: 2,
+    explanation: "L'eau absorbe progressivement les grandes longueurs d'onde : le rouge disparaît le premier (dès quelques mètres), puis l'orange, le jaune... le bleu/vert restent visibles le plus longtemps.",
+  },
+  {
+    id: "phy-11", cat: "physique",
+    q: "Le son se déplace sous l'eau :",
+    choices: [
+      "Beaucoup plus lentement que dans l'air",
+      "À peu près à la même vitesse que dans l'air",
+      "Beaucoup plus vite que dans l'air (environ 4 fois)",
+      "Le son ne se propage pas du tout sous l'eau",
+    ],
+    correct: 2,
+    explanation: "Cette vitesse accrue rend aussi la provenance d'un son beaucoup plus difficile à localiser sous l'eau qu'en surface — utile à savoir pour expliquer pourquoi on utilise des signaux visuels/tactiles plutôt que la voix.",
+  },
+  {
+    id: "phy-12", cat: "physique",
+    q: "Pourquoi un plongeur perd-il de la chaleur corporelle beaucoup plus vite dans l'eau que dans l'air à température égale ?",
+    choices: [
+      "L'eau conduit la chaleur bien plus efficacement que l'air (plusieurs dizaines de fois plus vite)",
+      "L'eau contient toujours moins de chaleur que l'air",
+      "Ce n'est pas vrai, la perte de chaleur est identique",
+      "Uniquement à cause du vent apparent créé par les palmes",
+    ],
+    correct: 0,
+    explanation: "La conductivité thermique de l'eau est très supérieure à celle de l'air, ce qui explique le besoin de protection thermique (combinaison) même dans une eau qui semble « tiède ».",
+  },
+  {
+    id: "phy-13", cat: "physique",
+    q: "Un bloc en acier plein et un bloc en aluminium plein de même volume : lequel a tendance à devenir le plus flottant en fin de plongée quand il se vide ?",
+    choices: [
+      "L'aluminium, qui devient plus vite positif en se vidant d'air",
+      "L'acier, systématiquement",
+      "Cela ne dépend jamais du matériau",
+      "Les deux deviennent négatifs en se vidant",
+    ],
+    correct: 0,
+    explanation: "Point pédagogique classique de gestion du lestage : les blocs alu ont tendance à devenir positifs en fin de plongée quand ils sont vides, contrairement à l'acier qui reste souvent plus négatif — à ajuster selon le modèle exact du bloc.",
+  },
+
   // ---------------- PHYSIOLOGIE ----------------
   {
     id: "phz-01", cat: "physiologie",
@@ -204,6 +277,79 @@ export const QUESTIONS = [
     explanation: "La gestion du stress et de l'essoufflement d'un élève est un point central des modules de gestion de groupe/rescue de la formation instructeur.",
   },
 
+  {
+    id: "phz-09", cat: "physiologie",
+    q: "Parmi ces techniques d'équilibrage des oreilles, laquelle est couramment enseignée en plongée (en plus de la Valsalva) ?",
+    choices: [
+      "La manœuvre de Frenzel",
+      "La manœuvre de Heimlich",
+      "La respiration abdominale forcée",
+      "Le pincement du masque uniquement",
+    ],
+    correct: 0,
+    explanation: "La technique de Frenzel (utilisation de la langue/glotte pour comprimer l'air vers les trompes d'Eustache) est une alternative à la Valsalva, souvent présentée comme plus douce pour les oreilles.",
+  },
+  {
+    id: "phz-10", cat: "physiologie",
+    q: "L'hyperventilation volontaire avant une descente en apnée est dangereuse car elle peut provoquer :",
+    choices: [
+      "Une syncope (perte de connaissance) par baisse du CO2 sans avertissement suffisant avant le manque d'oxygène",
+      "Une accélération du rythme cardiaque bénéfique",
+      "Une meilleure oxygénation sans aucun risque",
+      "Un simple mal de tête sans gravité",
+    ],
+    correct: 0,
+    explanation: "En abaissant artificiellement le CO2 (signal d'alerte respiratoire) sans augmenter significativement l'oxygène disponible, l'hyperventilation retarde l'envie de respirer et peut provoquer une syncope hypoxique sans signe avant-coureur.",
+  },
+  {
+    id: "phz-11", cat: "physiologie",
+    q: "Une intoxication au monoxyde de carbone (air contaminé, ex. compresseur mal positionné) peut provoquer :",
+    choices: [
+      "Maux de tête, confusion, nausées, pouvant aller jusqu'à la perte de connaissance",
+      "Uniquement une légère toux sans autre symptôme",
+      "Aucun symptôme détectable avant l'accident",
+      "Une amélioration temporaire de la vigilance",
+    ],
+    correct: 0,
+    explanation: "D'où l'importance, pour un futur instructeur, de connaître les bonnes pratiques de positionnement des compresseurs et les signes d'alerte à surveiller chez les élèves.",
+  },
+  {
+    id: "phz-12", cat: "physiologie",
+    q: "La présence d'un foramen ovale perméable (PFO) chez un plongeur est un facteur associé à :",
+    choices: [
+      "Un risque accru d'accident de décompression",
+      "Une meilleure tolérance à la narcose",
+      "Une résistance accrue au froid",
+      "Aucun lien connu avec la plongée",
+    ],
+    correct: 0,
+    explanation: "Un PFO peut permettre à des micro-bulles veineuses de passer directement côté artériel sans être filtrées par les poumons, ce qui est associé à un risque accru de certains types d'ADD.",
+  },
+  {
+    id: "phz-13", cat: "physiologie",
+    q: "Le mal de mer (mal des transports) chez un élève avant une plongée bateau doit être pris en compte car :",
+    choices: [
+      "Il peut favoriser les vomissements et la déshydratation, et augmenter le stress avant la mise à l'eau",
+      "Il n'a aucun impact sur la sécurité de la plongée",
+      "Il disparaît toujours instantanément une fois sous l'eau",
+      "Il ne concerne que le capitaine du bateau",
+    ],
+    correct: 0,
+    explanation: "Un élève mal en point avant la plongée est un facteur de risque à ne pas négliger dans le briefing et l'évaluation de son aptitude à plonger ce jour-là.",
+  },
+  {
+    id: "phz-14", cat: "physiologie",
+    q: "L'alcool et la déshydratation, avant ou après une plongée, sont généralement considérés comme :",
+    choices: [
+      "Des facteurs aggravants du risque d'accident de décompression",
+      "Sans aucun effet sur le risque de décompression",
+      "Des facteurs qui réduisent le risque d'ADD",
+      "Utiles pour se réchauffer après la plongée",
+    ],
+    correct: 0,
+    explanation: "Une bonne hydratation et l'évitement de l'alcool autour des plongées sont des conseils de prévention couramment enseignés, l'alcool favorisant la déshydratation et modifiant la perception du risque.",
+  },
+
   // ---------------- MATERIEL ----------------
   {
     id: "mat-01", cat: "materiel",
@@ -264,6 +410,67 @@ export const QUESTIONS = [
     ],
     correct: 2,
     explanation: "Il applique un modèle de désaturation (algorithme propre au fabricant) au profil réel de la plongée pour estimer la charge en azote et les paliers éventuels.",
+  },
+
+  {
+    id: "mat-06", cat: "materiel",
+    q: "Le détendeur de secours (souvent appelé « octopus ») sert à :",
+    choices: [
+      "Fournir de l'air à un binôme en cas de panne d'air, via un 2e étage supplémentaire",
+      "Gonfler le gilet plus rapidement",
+      "Remplacer le manomètre en cas de panne",
+      "Mesurer la profondeur",
+    ],
+    correct: 0,
+    explanation: "C'est un équipement de sécurité central dans les procédures de partage d'air, généralement identifié par une couleur voyante (souvent jaune) pour être repéré rapidement par le binôme en détresse.",
+  },
+  {
+    id: "mat-07", cat: "materiel",
+    q: "Le lest (poids) porté par un plongeur doit toujours être :",
+    choices: [
+      "Fixé de façon permanente et impossible à larguer",
+      "Rapidement largable en cas d'urgence",
+      "Réparti uniquement sur la tête",
+      "Le plus lourd possible, sans lien avec la flottabilité réelle",
+    ],
+    correct: 1,
+    explanation: "Le lestage doit toujours pouvoir être largué rapidement en cas de problème de flottabilité grave — un point de sécurité fondamental à vérifier avant chaque plongée d'élèves.",
+  },
+  {
+    id: "mat-08", cat: "materiel",
+    q: "Une différence clé entre une combinaison humide et une combinaison étanche est :",
+    choices: [
+      "La combinaison étanche isole le corps de l'eau, la combinaison humide laisse entrer un film d'eau qui se réchauffe au contact du corps",
+      "Elles sont strictement identiques dans leur fonctionnement",
+      "La combinaison humide est toujours plus chaude que l'étanche",
+      "La combinaison étanche ne peut jamais servir en eau froide",
+    ],
+    correct: 0,
+    explanation: "Le choix entre les deux dépend notamment de la température de l'eau et de la durée de plongée — un point pédagogique classique du matériel adapté à l'environnement.",
+  },
+  {
+    id: "mat-09", cat: "materiel",
+    q: "Après une plongée, l'entretien de base du matériel recommandé consiste à :",
+    choices: [
+      "Le rincer à l'eau douce, en particulier le détendeur (bouton de purge non appuyé) et le gilet",
+      "Le laisser sécher directement avec l'eau salée dessus",
+      "Ne rincer que la combinaison",
+      "Ranger le matériel humide dans un sac fermé sans le rincer",
+    ],
+    correct: 0,
+    explanation: "Un rinçage systématique à l'eau douce prolonge la durée de vie du matériel et fait partie des bonnes pratiques à transmettre dès les premiers cours.",
+  },
+  {
+    id: "mat-10", cat: "materiel",
+    q: "Un cylindre (bloc) en acier, comparé à un cylindre en aluminium de contenance similaire, est généralement :",
+    choices: [
+      "Plus dense et souvent plus négatif, y compris quasi vide",
+      "Toujours plus léger à sec",
+      "Fabriqué avec un embout différent empêchant tout détendeur standard",
+      "Interdit pour la plongée loisir",
+    ],
+    correct: 0,
+    explanation: "Ces différences de flottabilité selon le matériau du bloc influencent le lestage à prévoir — un point à bien maîtriser pour conseiller correctement ses élèves.",
   },
 
   // ---------------- PLANIFICATION & TABLES ----------------
@@ -328,6 +535,67 @@ export const QUESTIONS = [
     explanation: "Plus l'intervalle de surface est long, plus le corps élimine d'azote, ce qui redonne de la marge pour la plongée suivante (plus de temps sans palier, en général).",
   },
 
+  {
+    id: "pla-06", cat: "planification",
+    q: "En cas de panne d'air totale à faible profondeur, la procédure de remontée d'urgence privilégiée est généralement :",
+    choices: [
+      "Une remontée contrôlée, si possible assistée par le binôme, en soufflant continuellement pour ne pas bloquer sa respiration",
+      "Une apnée complète jusqu'à la surface, poumons bloqués",
+      "Une descente pour chercher de l'air ailleurs",
+      "Attendre immobile en espérant que l'air revienne",
+    ],
+    correct: 0,
+    explanation: "Le principe fondamental reste de ne jamais bloquer sa respiration en remontant, pour éviter la surpression pulmonaire, tout en remontant le plus posément possible.",
+  },
+  {
+    id: "pla-07", cat: "planification",
+    q: "Que peut faire un ordinateur de plongée si un plongeur dépasse gravement les limites qu'il calcule ?",
+    choices: [
+      "Rien du tout, dans tous les cas",
+      "Se verrouiller temporairement sur certains modèles, empêchant l'affichage des données de plongée pendant un délai",
+      "Se réinitialiser automatiquement sans conséquence",
+      "Prolonger automatiquement l'autonomie en air",
+    ],
+    correct: 1,
+    explanation: "Le comportement exact dépend entièrement du modèle et du fabricant : certains ordinateurs se verrouillent après un dépassement sévère. Vérifie toujours la documentation du modèle utilisé par tes élèves.",
+  },
+  {
+    id: "pla-08", cat: "planification",
+    q: "La plongée dite « multi-niveaux » consiste à :",
+    choices: [
+      "Descendre directement à la profondeur maximale puis y rester tout le temps de la plongée",
+      "Profiter d'un profil de plongée qui remonte progressivement par paliers de profondeur au fil du temps, ce qui peut prolonger le temps de plongée sans palier",
+      "Faire uniquement des paliers de décompression obligatoires",
+      "Une technique réservée à la plongée en altitude",
+    ],
+    correct: 1,
+    explanation: "En remontant progressivement au fil de la plongée plutôt qu'en restant à profondeur constante, on limite l'accumulation d'azote — un principe qu'un ordinateur de plongée gère nativement, contrairement à une table carrée classique.",
+  },
+  {
+    id: "pla-09", cat: "planification",
+    q: "Pourquoi de nombreux ordinateurs de plongée intègrent-ils une marge de conservatisme réglable ?",
+    choices: [
+      "Pour ajouter une sécurité supplémentaire face à la variabilité individuelle (fatigue, froid, âge, condition physique...)",
+      "Uniquement pour compliquer l'utilisation de l'appareil",
+      "Parce que la loi l'exige dans tous les pays",
+      "Cela n'existe sur aucun ordinateur du marché",
+    ],
+    correct: 0,
+    explanation: "Le risque de décompression n'est pas purement mathématique : des facteurs individuels influencent la susceptibilité aux accidents, d'où l'intérêt pédagogique d'expliquer ce réglage à ses élèves.",
+  },
+  {
+    id: "pla-10", cat: "planification",
+    q: "En plongée successive, si l'on ne respecte pas un intervalle de surface suffisant, le risque principal est :",
+    choices: [
+      "D'aborder la 2e plongée avec un azote résiduel plus élevé que prévu, réduisant la marge de sécurité",
+      "De consommer plus d'air uniquement",
+      "De ne plus pouvoir utiliser son ordinateur",
+      "Aucun risque particulier",
+    ],
+    correct: 0,
+    explanation: "C'est pour cette raison que la gestion de l'intervalle de surface est un point clé enseigné dès le niveau Open Water et approfondi en formation d'encadrement.",
+  },
+
   // ---------------- ENVIRONNEMENT & SECURITE ----------------
   {
     id: "env-01", cat: "environnement",
@@ -376,6 +644,67 @@ export const QUESTIONS = [
     ],
     correct: 1,
     explanation: "Un briefing structuré et complet, adapté au site et aux conditions du jour, est une compétence pédagogique clé évaluée pour un instructeur.",
+  },
+
+  {
+    id: "env-05", cat: "environnement",
+    q: "La plongée dérivante (drift diving) se caractérise par :",
+    choices: [
+      "Une plongée qui se déroule en se laissant porter par le courant, avec un suivi bateau adapté",
+      "Une interdiction totale d'utiliser un bateau",
+      "Une plongée toujours réalisée à l'ancre, sans aucun courant",
+      "Une technique réservée uniquement à la plongée technique profonde",
+    ],
+    correct: 0,
+    explanation: "Elle demande un briefing spécifique (signal de fin de plongée, suivi de palanquée par le bateau, port éventuel d'un parachute de palier/DSMB) que l'instructeur doit savoir expliquer clairement.",
+  },
+  {
+    id: "env-06", cat: "environnement",
+    q: "Face à la vie marine, la bonne pratique générale à enseigner aux élèves est :",
+    choices: [
+      "Toucher et manipuler les organismes pour mieux les observer",
+      "Observer sans toucher ni nourrir, en gardant une distance respectueuse",
+      "Collecter des échantillons à chaque plongée",
+      "Ignorer complètement l'environnement, ce n'est pas un sujet pédagogique",
+    ],
+    correct: 1,
+    explanation: "La sensibilisation environnementale (ne pas toucher, ne pas nourrir, ne pas abîmer les fonds) fait partie intégrante de la pédagogie moderne de la plongée, dès les premiers niveaux.",
+  },
+  {
+    id: "env-07", cat: "environnement",
+    q: "Un DSMB (parachute de palier / marqueur de surface gonflable) sert principalement à :",
+    choices: [
+      "Signaler la position du plongeur en surface, notamment en plongée dérivante ou en cas de courant",
+      "Remplacer le gilet stabilisateur",
+      "Servir uniquement de flotteur pour transporter du matériel",
+      "Indiquer la profondeur atteinte",
+    ],
+    correct: 0,
+    explanation: "Savoir l'utiliser et l'enseigner correctement (déploiement en fin de plongée ou lors d'un palier) est une compétence de sécurité valorisée dans de nombreux cursus d'encadrement.",
+  },
+  {
+    id: "env-08", cat: "environnement",
+    q: "En eau très froide, un point de vigilance supplémentaire pour l'instructeur est :",
+    choices: [
+      "Le risque de gel/blocage du détendeur en position ouverte (free-flow), en plus du risque d'hypothermie",
+      "L'absence totale de risque particulier par rapport à l'eau tempérée",
+      "Le fait que le matériel n'a besoin d'aucune adaptation",
+      "L'interdiction totale de plonger en dessous de 15°C",
+    ],
+    correct: 0,
+    explanation: "Certains détendeurs standards sont plus sujets au givrage en eau très froide, ce qui fait partie des points à connaître avant d'encadrer ce type d'environnement.",
+  },
+  {
+    id: "env-09", cat: "environnement",
+    q: "Un briefing de sécurité avant plongée en carrière ou lac (par rapport à la mer) doit notamment mentionner :",
+    choices: [
+      "La visibilité souvent réduite, l'absence de courant/marée mais parfois une eau plus froide en profondeur, et les zones réglementées du site",
+      "Rien de spécifique, le briefing est strictement identique à la mer",
+      "Uniquement la météo du jour",
+      "Que la plongée en eau douce ne nécessite jamais de palier de sécurité",
+    ],
+    correct: 0,
+    explanation: "Chaque environnement a ses spécificités (visibilité, thermoclines marqués, absence de courant mais parfois profondeur trompeuse) à intégrer dans un briefing adapté au site.",
   },
 
   // ---------------- SSI : PARCOURS & PEDAGOGIE ----------------
@@ -463,6 +792,66 @@ export const QUESTIONS = [
     correct: 1,
     explanation: "L'évaluation d'un instructeur porte sur la pédagogie, la gestion de groupe et la sécurité — bien au-delà du simple niveau de plongée personnel.",
   },
+  {
+    id: "ssi-08", cat: "ssi",
+    q: "En pédagogie de la plongée, la séquence classique « expliquer → démontrer → faire pratiquer → corriger » sert à :",
+    choices: [
+      "Structurer l'apprentissage d'un geste technique en donnant à l'élève un modèle clair avant qu'il ne s'exerce",
+      "Remplacer totalement la théorie académique",
+      "N'être utilisée qu'en piscine, jamais en milieu naturel",
+      "Éviter d'avoir à corriger les élèves",
+    ],
+    correct: 0,
+    explanation: "C'est un principe général d'apprentissage moteur utilisé dans l'enseignement de la plongée (et de nombreuses disciplines techniques), bien au-delà d'un seul organisme de formation.",
+  },
+  {
+    id: "ssi-09", cat: "ssi",
+    q: "Pourquoi un débriefing structuré après chaque séance avec des élèves est-il recommandé ?",
+    choices: [
+      "Pour faire le point sur ce qui a été réussi, ce qui doit être retravaillé, et fixer des objectifs clairs pour la suite",
+      "Uniquement pour remplir une formalité administrative",
+      "Parce que cela remplace l'évaluation continue des compétences",
+      "Ce n'est utile qu'en fin de formation complète, jamais après une séance",
+    ],
+    correct: 0,
+    explanation: "Le débriefing fait partie intégrante du cycle pédagogique : il renforce l'apprentissage et permet d'ajuster la suite du programme à chaque élève.",
+  },
+  {
+    id: "ssi-10", cat: "ssi",
+    q: "Adapter son enseignement au rythme et au niveau de chaque élève (différenciation pédagogique) est important car :",
+    choices: [
+      "Les élèves progressent à des vitesses différentes, et un même exercice peut être trop facile pour l'un et trop difficile pour l'autre",
+      "Tous les élèves apprennent toujours exactement de la même façon",
+      "C'est une perte de temps pour l'instructeur",
+      "Cela ne concerne que l'enseignement théorique, jamais la pratique",
+    ],
+    correct: 0,
+    explanation: "Un bon instructeur observe, ajuste le rythme et personnalise le feedback plutôt que d'appliquer un déroulé strictement identique à tous les élèves.",
+  },
+  {
+    id: "ssi-11", cat: "ssi",
+    q: "Avant la mise à l'eau, une vérification mutuelle du matériel entre binômes (buddy check) permet notamment de :",
+    choices: [
+      "Repérer des oublis ou anomalies (air coupé, sangle mal fixée, etc.) avant qu'ils ne posent problème sous l'eau",
+      "Remplacer le briefing de plongée",
+      "N'est utile que pour les plongeurs débutants, jamais pour les moniteurs",
+      "Vérifier uniquement l'heure des montres de chacun",
+    ],
+    correct: 0,
+    explanation: "C'est une pratique de sécurité largement enseignée dans les organismes de formation ; les modalités précises (checklist, ordre des vérifications) peuvent varier selon le programme suivi.",
+  },
+  {
+    id: "ssi-12", cat: "ssi",
+    q: "Pendant un cours encadré, un instructeur doit en permanence :",
+    choices: [
+      "Garder une vision d'ensemble du groupe (comptage, position, état de chacun), pas seulement se concentrer sur un élève à la fois",
+      "Se concentrer uniquement sur l'élève le plus en difficulté, sans se soucier des autres",
+      "Laisser les élèves totalement autonomes dès le premier cours",
+      "Rester en surface pendant toute la durée de la plongée encadrée",
+    ],
+    correct: 0,
+    explanation: "La supervision globale du groupe (awareness) est une compétence centrale évaluée lors de la formation instructeur, bien au-delà de la simple exécution technique des exercices.",
+  },
 ];
 
 export const MEMO_CARDS = [
@@ -475,6 +864,8 @@ export const MEMO_CARDS = [
       "Dalton : Ptotale = somme des pressions partielles → base du calcul de MOD en nitrox.",
       "Henry : quantité de gaz dissous ∝ pression partielle → base de toute la théorie de décompression.",
       "Repère usuel : ≈ +1 bar / 10 m d'eau de mer, en plus du bar atmosphérique de surface (à confirmer avec ton support de cours).",
+      "Archimède : poussée verticale = poids du volume de fluide déplacé → base de la flottabilité.",
+      "Sous l'eau : objets ~25% plus gros/proches (réfraction), rouge absorbé en premier, son ~4x plus rapide que dans l'air, chaleur perdue bien plus vite que dans l'air.",
     ],
   },
   {
@@ -487,6 +878,9 @@ export const MEMO_CARDS = [
       "Surpression pulmonaire : blocage respiratoire en remontée → risque d'embolie gazeuse, potentiellement mortel.",
       "Toxicité de l'O2 : risque à pression partielle élevée (nitrox/tech) → calcul systématique de la MOD.",
       "Barotraumatismes : oreilles/sinus (descente), masque (descente), poumons (remontée) — ne jamais forcer une équilibration.",
+      "Techniques d'équilibrage : Valsalva, Frenzel — variantes douces à connaître pour dépanner un élève.",
+      "Facteurs aggravants d'ADD : alcool, déshydratation, foramen ovale perméable (PFO), fatigue, froid.",
+      "Hyperventilation avant apnée : dangereuse, peut provoquer une syncope hypoxique sans signe avant-coureur.",
     ],
   },
   {
@@ -500,6 +894,9 @@ export const MEMO_CARDS = [
       "BCD : ajuste la flottabilité (ajout/évacuation d'air).",
       "Néoprène : se compresse avec la profondeur → perte de flottabilité et d'isolation thermique.",
       "Ordinateur de plongée : modélise la charge en azote des tissus à partir du profil réel de la plongée.",
+      "Octopus (2e détendeur) : air de secours pour le binôme en panne d'air.",
+      "Lest : toujours largable rapidement en cas d'urgence.",
+      "Bloc acier vs aluminium : flottabilité différente en fin de plongée (l'alu tend à devenir positif à vide) → ajuste le lestage en conséquence.",
     ],
   },
   {
@@ -512,6 +909,8 @@ export const MEMO_CARDS = [
       "Vitesse de remontée contrôlée : indispensable pour laisser l'azote repasser en phase gazeuse en douceur.",
       "Palier de sécurité : marge de sécurité supplémentaire en fin de plongée sans décompression obligatoire.",
       "Plongée en altitude : pression de surface plus basse → procédures/tables adaptées nécessaires.",
+      "Plongée multi-niveaux : remonter progressivement pendant la plongée limite l'accumulation d'azote par rapport à un profil « carré ».",
+      "Conservatisme réglable sur ordinateur : sécurité supplémentaire face à la variabilité individuelle (froid, âge, fatigue...).",
       "⚠️ Les valeurs précises (durées, profondeurs, vitesses, ratios) doivent être vérifiées dans ton support SSI officiel à jour (manuel, MySSI, ton Instructor Trainer) — volontairement non reproduites ici.",
     ],
   },
@@ -525,6 +924,22 @@ export const MEMO_CARDS = [
       "Thermocline : anticiper l'inconfort thermique et le flou visuel avec les élèves.",
       "Briefing bateau : procédures de mise à l'eau/remontée, signaux de rappel, conduite en cas de séparation.",
       "Gestion d'un élève en essoufflement : stabiliser, contact visuel/physique, ralentir la respiration, stopper l'effort.",
+      "DSMB (parachute de palier) : signale la position en surface, utile en dérivante ou en cas de courant.",
+      "Vie marine : observer sans toucher ni nourrir.",
+      "Eau froide : risque de givrage (free-flow) des détendeurs, en plus de l'hypothermie.",
+    ],
+  },
+  {
+    id: "m-pedagogie",
+    cat: "ssi",
+    title: "Pédagogie & encadrement — principes généraux",
+    bullets: [
+      "Séquence d'apprentissage d'un geste technique : expliquer → démontrer → faire pratiquer → corriger.",
+      "Débriefing après chaque séance : ce qui est réussi, ce qui est à retravailler, objectifs pour la suite.",
+      "Différenciation : adapter rythme et exercices au niveau réel de chaque élève, pas un déroulé unique pour tous.",
+      "Vérification mutuelle du matériel (buddy check) avant la mise à l'eau : repérer les oublis/anomalies en amont.",
+      "Supervision de groupe (awareness) : garder une vision d'ensemble, pas seulement se concentrer sur un élève à la fois.",
+      "⚠️ Ce sont des principes pédagogiques généraux ; les procédures/checklists précises de ton organisme peuvent avoir leur propre formalisation à connaître en plus.",
     ],
   },
   {
