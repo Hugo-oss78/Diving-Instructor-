@@ -72,16 +72,34 @@ Wikipedia (dont les articles cités eux-mêmes des références).
 
 ## Parcours & pédagogie SSI
 
-- Structure du parcours professionnel (Dive Control Specialist → ITC →
-  IE → Open Water Instructor → Instructor Trainer) :
+- Structure du parcours professionnel (Divemaster → ITC → IE → Open
+  Water Instructor → Instructor Trainer) :
   [SSI officiel – Instructor Trainer](https://www.divessi.com/en/professional/scuba-diving/instructor-trainer),
   [SSI officiel – Instructor Training Course](https://www.divessi.com/en/professional/scuba-diving/instructor-training-course),
   [SSI Recognition Levels – SAR Scuba](https://sarscuba.com/ssi-recognition),
   [Dive O'Clock – SSI Instructor Trainer Courses](https://www.diveoclock.com/blog/ITC/)
-- ⚠️ Ces sources décrivent la structure **publique** du parcours. Les
-  standards internes précis (ratios, procédures d'examen détaillées,
-  contenu exact des tables) ne sont PAS repris ici : seul le SSI
-  Instructor Manual / MySSI officiel fait foi pour ces points.
+- Étapes AI → ITC → IE, prérequis (100 plongées/65h, Divemaster, Nitrox,
+  avis médical <1 an, premiers secours <24 mois), et les 10 « Academic
+  Sessions » de l'ITC (Overview of SSI, Duties of an SSI Professional,
+  Program Administration, Academic Sessions, In-Water Teaching, Assistant
+  Instructor Programs, The Open Water Diver Program, Open Water
+  Instructor Specialties, Diver Stress & Rescue and Divemaster, The
+  Business of Diving) :
+  **portail officiel SSI** — [training.divessi.com](https://training.divessi.com)
+  (résultats de recherche, contenu confirmé sur plusieurs pages du
+  portail), recoupé avec la brochure 2026 d'un centre partenaire officiel
+  « SSI PRO Instructor Training Center » (Indonésie, transmise par
+  l'utilisateur) et d'autres centres indépendants
+  ([Egypt Divers](https://egyptdivers.com/hurghada/diving-courses/ssi-diving-courses/ssi-instructor-training-course/),
+  [Ocean Tribe – ITC Schedule](https://oceantribe.co/scuba-diving-courses/pro-level-courses/ssi-instructor-training-course/ssi-itc-schedule-instructor-course-calendar-2025/)).
+- ⚠️ Ces sources décrivent la structure **publique** du parcours et des
+  prérequis généraux. Les valeurs précises peuvent varier selon le
+  centre/l'Instructor Trainer et évoluer dans le temps ; les standards
+  internes détaillés (ratios, procédures d'examen précises, contenu
+  exact des tables) ne sont PAS repris ici : seul le SSI Instructor
+  Manual / MySSI officiel fait foi. Les tarifs et plannings jour par jour
+  sont propres à chaque centre (non universels) et n'ont pas été repris
+  dans l'app.
 
 ## Ce qui n'a volontairement PAS été vérifié/ajouté
 

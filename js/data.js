@@ -852,6 +852,78 @@ export const QUESTIONS = [
     correct: 0,
     explanation: "La supervision globale du groupe (awareness) est une compétence centrale évaluée lors de la formation instructeur, bien au-delà de la simple exécution technique des exercices.",
   },
+  {
+    id: "ssi-13", cat: "ssi",
+    q: "Selon le portail de formation officiel SSI, le parcours vers Open Water Instructor se résume en 3 grandes étapes. Lesquelles ?",
+    choices: [
+      "AI (Assistant Instructor) → ITC (Instructor Training Course) → IE (Instructor Evaluation)",
+      "Open Water Diver → Advanced → Rescue",
+      "Try Scuba → Specialty Diver → Master Diver",
+      "Dive Guide → Science of Diving → Nitrox",
+    ],
+    correct: 0,
+    explanation: "C'est la structure confirmée à la fois par le portail officiel training.divessi.com et par plusieurs centres partenaires SSI PRO Instructor Training Center : AI, puis ITC, puis IE.",
+  },
+  {
+    id: "ssi-14", cat: "ssi",
+    q: "Parmi les prérequis généralement demandés pour s'inscrire à un Instructor Training Course (ITC) SSI, on trouve notamment :",
+    choices: [
+      "Être certifié Divemaster (ou équivalent), avoir un nombre minimum de plongées loggées, et une certification Nitrox",
+      "N'avoir jamais plongé auparavant",
+      "Être uniquement titulaire d'un Open Water Diver, sans autre expérience",
+      "Avoir un diplôme universitaire en biologie marine",
+    ],
+    correct: 0,
+    explanation: "D'après le portail officiel SSI : certification Divemaster (ou équivalent), au moins 100 plongées loggées totalisant 65h ou plus, et une certification Nitrox (Enriched Air) — en plus d'un avis médical et d'un certificat de premiers secours à jour. Les valeurs exactes doivent être reconfirmées auprès de ton centre, car un Instructor Trainer peut préciser des points selon le contexte.",
+  },
+  {
+    id: "ssi-15", cat: "ssi",
+    q: "Le certificat médical (avis d'aptitude à la plongée signé par un médecin) exigé pour l'ITC doit généralement dater de :",
+    choices: [
+      "Moins d'un an",
+      "Il n'y a aucune limite de validité",
+      "Moins de 10 ans",
+      "Le jour même de l'examen uniquement",
+    ],
+    correct: 0,
+    explanation: "Selon le portail officiel SSI, un avis médical d'aptitude à la plongée de moins d'un an est généralement requis pour l'ITC — à reconfirmer avec ton centre de formation.",
+  },
+  {
+    id: "ssi-16", cat: "ssi",
+    q: "Le certificat de premiers secours / RCP / oxygénothérapie (ex. SSI React Right) exigé pour l'ITC doit généralement avoir été obtenu :",
+    choices: [
+      "Dans les 24 derniers mois",
+      "Il y a plus de 10 ans, sans limite",
+      "Le jour de l'inscription uniquement",
+      "Cette certification n'est jamais demandée",
+    ],
+    correct: 0,
+    explanation: "Le portail officiel SSI mentionne une validité de 24 mois pour le certificat de premiers secours/RCP/oxygène exigé à l'entrée en ITC — confirmé indépendamment par plusieurs centres partenaires SSI PRO Instructor Training Center.",
+  },
+  {
+    id: "ssi-17", cat: "ssi",
+    q: "L'ITC comprend des « Academic Sessions » numérotées (1 à 10 environ). Lequel de ces intitulés en fait bien partie ?",
+    choices: [
+      "« Overview of SSI » (aperçu de l'organisation SSI)",
+      "« Introduction à la spéléologie »",
+      "« Histoire des équipements de plongée du 19e siècle »",
+      "« Cuisine et nutrition du plongeur »",
+    ],
+    correct: 0,
+    explanation: "Confirmé par le portail officiel SSI : les Academic Sessions de l'ITC incluent notamment « Overview of SSI », « Duties of an SSI Professional », « Program Administration », « The Open Water Diver Program », « Diver Stress & Rescue and Divemaster » et « The Business of Diving », entre autres.",
+  },
+  {
+    id: "ssi-18", cat: "ssi",
+    q: "Pendant l'ITC, les « Practical Application Sessions » (ateliers pratiques) servent principalement à :",
+    choices: [
+      "Mettre en pratique l'enseignement réel de segments de cours (ex. Open Water Diver, Nitrox, Diver Stress & Rescue) sous supervision, avec retours et analyse vidéo",
+      "Uniquement passer un examen écrit final",
+      "Faire de la plongée loisir sans objectif pédagogique",
+      "Remplacer entièrement les sessions académiques théoriques",
+    ],
+    correct: 0,
+    explanation: "Ces ateliers, souvent suivis d'une analyse vidéo et d'un débrief, permettent aux candidats instructeurs de s'entraîner à enseigner de vrais segments de cours avant de le faire seuls avec de vrais élèves.",
+  },
 ];
 
 export const MEMO_CARDS = [
@@ -945,13 +1017,15 @@ export const MEMO_CARDS = [
   {
     id: "m-ssi",
     cat: "ssi",
-    title: "Parcours SSI — repères (source : divessi.com)",
+    title: "Parcours SSI — repères (source : portail officiel training.divessi.com + centres partenaires)",
     bullets: [
-      "Loisir → pro : Open Water Diver → Advanced Adventurer/spécialités → Dive Guide / Science of Diving → Dive Control Specialist (Divemaster + Assistant Instructor).",
-      "Dive Control Specialist → Instructor Training Course (ITC) → Instructor Evaluation (IE) → SSI Open Water Instructor.",
+      "Loisir → pro : Open Water Diver → Advanced Adventurer/spécialités → Dive Guide / Science of Diving → Divemaster.",
+      "Vers l'instructorat, 3 étapes : AI (Assistant Instructor) → ITC (Instructor Training Course) → IE (Instructor Evaluation) → SSI Open Water Instructor.",
+      "Prérequis courants pour l'ITC (à reconfirmer avec ton centre) : Divemaster certifié, ~100 plongées loggées (65h+), certification Nitrox, avis médical de moins d'1 an, certificat premiers secours/RCP/O2 de moins de 24 mois.",
+      "Academic Sessions de l'ITC (10 sessions numérotées) : Overview of SSI, Duties of an SSI Professional, Program Administration, Academic Sessions, In-Water Teaching, Assistant Instructor Programs, The Open Water Diver Program, Open Water Instructor Specialties, Diver Stress & Rescue and Divemaster, The Business of Diving.",
+      "Practical Application Sessions : ateliers où le candidat enseigne réellement des segments de cours (OWD, Nitrox, Stress & Rescue...) sous supervision, avec analyse vidéo et débrief.",
       "Un Open Water Instructor peut ensuite évoluer vers Specialty Instructor, puis Instructor Trainer (habilité à conduire des ITC et Instructor Crossovers).",
-      "Pendant l'ITC : sessions académiques, encadrement en eau confinée, entraînement à l'enseignement de l'OWD et de spécialités (Nitrox, Diver Stress & Rescue, Perfect Buoyancy...).",
-      "⚠️ Structure générale vérifiée sur le site officiel SSI à la conception de cette appli (2026) — les programmes évoluent : reconfirme toujours sur divessi.com ou auprès de ton centre SSI.",
+      "⚠️ Structure et prérequis confirmés sur le portail officiel SSI et recoupés avec plusieurs centres partenaires SSI PRO (2026) — les standards évoluent et un Instructor Trainer peut préciser des points : reconfirme toujours auprès de ton centre.",
     ],
   },
   {
