@@ -1,6 +1,9 @@
-import { CATEGORIES, QUESTIONS, MEMO_CARDS } from "./data.js";
+import { CATEGORIES as CATEGORIES_FR, QUESTIONS as QUESTIONS_FR, MEMO_CARDS as MEMO_CARDS_FR } from "./data.js";
+import { CATEGORIES as CATEGORIES_EN, QUESTIONS as QUESTIONS_EN, MEMO_CARDS as MEMO_CARDS_EN } from "./data.en.js";
+import { UI } from "./i18n.js";
 
 const STORAGE_KEY = "instructorPrepProgressV1";
+const LANG_KEY = "instructorPrepLang";
 
 function loadProgress() {
   try {
@@ -19,11 +22,42 @@ function saveProgress(progress) {
   }
 }
 
+function loadLang() {
+  try {
+    const saved = localStorage.getItem(LANG_KEY);
+    return saved === "en" ? "en" : "fr";
+  } catch {
+    return "fr";
+  }
+}
+
+function saveLang(lang) {
+  try {
+    localStorage.setItem(LANG_KEY, lang);
+  } catch {
+    /* ignore */
+  }
+}
+
 const state = {
   route: "home",
   params: {},
   progress: loadProgress(),
+  lang: loadLang(),
 };
+
+const DATA_BY_LANG = {
+  fr: { categories: CATEGORIES_FR, questions: QUESTIONS_FR, memoCards: MEMO_CARDS_FR },
+  en: { categories: CATEGORIES_EN, questions: QUESTIONS_EN, memoCards: MEMO_CARDS_EN },
+};
+
+function data() {
+  return DATA_BY_LANG[state.lang];
+}
+
+function t(key) {
+  return UI[state.lang][key];
+}
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -35,26 +69,36 @@ function shuffle(arr) {
 }
 
 function catInfo(id) {
-  return CATEGORIES.find((c) => c.id === id) || { label: id, icon: "•", color: "#4fc3f7" };
+  return data().categories.find((c) => c.id === id) || { label: id, icon: "•", color: "#4fc3f7" };
 }
 
 function categoryStats(catId) {
-  const qs = QUESTIONS.filter((q) => q.cat === catId);
+  const qs = data().questions.filter((q) => q.cat === catId);
   const mastered = qs.filter((q) => state.progress.results[q.id] === true).length;
   return { total: qs.length, mastered };
 }
 
 function overallStats() {
-  const total = QUESTIONS.length;
-  const attempted = Object.keys(state.progress.results).length;
+  const total = data().questions.length;
   const mastered = Object.values(state.progress.results).filter((v) => v === true).length;
-  return { total, attempted, mastered };
+  return { total, mastered };
 }
 
 function el(html) {
-  const t = document.createElement("template");
-  t.innerHTML = html.trim();
-  return t.content.firstElementChild;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = html.trim();
+  return tpl.content.firstElementChild;
+}
+
+function applyStaticI18n() {
+  document.documentElement.lang = t("htmlLang");
+  document.querySelectorAll("[data-i18n]").forEach((elm) => {
+    elm.textContent = t(elm.dataset.i18n);
+  });
+  const toggleLabel = document.getElementById("lang-toggle-label");
+  const toggleBtn = document.getElementById("lang-toggle");
+  if (toggleLabel) toggleLabel.textContent = state.lang === "fr" ? "EN" : "FR";
+  if (toggleBtn) toggleBtn.setAttribute("aria-label", t("langToggleAria"));
 }
 
 function navigate(route, params = {}) {
@@ -73,6 +117,13 @@ document.querySelectorAll(".tab").forEach((btn) => {
   btn.addEventListener("click", () => navigate(btn.dataset.route));
 });
 
+document.getElementById("lang-toggle")?.addEventListener("click", () => {
+  state.lang = state.lang === "fr" ? "en" : "fr";
+  saveLang(state.lang);
+  applyStaticI18n();
+  render();
+});
+
 // ---------------- VIEWS ----------------
 
 function renderHome() {
@@ -81,42 +132,39 @@ function renderHome() {
   const view = el(`
     <div>
       <div class="card warning-card">
-        <h2>⚠️ Avant de commencer</h2>
-        <p>Cette appli est un outil de révision personnel, non affilié ni approuvé officiellement par SSI.
-        Pour toute donnée précise (ratios, standards, procédures d'examen), vérifie toujours ton
-        SSI Instructor Manual / MySSI et les indications de ton Instructor Trainer.</p>
+        <h2>${t("warningTitle")}</h2>
+        <p>${t("warningBody")}</p>
       </div>
 
       <div class="card">
-        <h2>Bienvenue 🤿</h2>
-        <p>Prépare ton monitorat de plongée (parcours SSI) : révise par catégorie, consulte les fiches
-        mémo, et suis ta progression au fil des sessions.</p>
+        <h2>${t("welcomeTitle")}</h2>
+        <p>${t("welcomeBody")}</p>
       </div>
 
       <div class="stat-row">
         <div class="stat-box">
           <div class="stat-value">${stats.mastered}/${stats.total}</div>
-          <div class="stat-label">Questions maîtrisées</div>
+          <div class="stat-label">${t("statMastered")}</div>
         </div>
         <div class="stat-box">
           <div class="stat-value">${pct}%</div>
-          <div class="stat-label">Progression globale</div>
+          <div class="stat-label">${t("statProgress")}</div>
         </div>
       </div>
 
-      <div class="section-title">Réviser par thème</div>
+      <div class="section-title">${t("sectionThemes")}</div>
       <div class="cat-grid" id="home-cat-grid"></div>
     </div>
   `);
 
   const grid = view.querySelector("#home-cat-grid");
-  CATEGORIES.forEach((c) => {
+  data().categories.forEach((c) => {
     const s = categoryStats(c.id);
     const tile = el(`
       <button class="cat-tile" style="background:${c.color}">
         <span class="cat-icon">${c.icon}</span>
         <span class="cat-label">${c.label}</span>
-        <span class="cat-meta">${s.mastered}/${s.total} maîtrisées</span>
+        <span class="cat-meta">${s.mastered}/${s.total} ${t("masteredSuffix")}</span>
       </button>
     `);
     tile.addEventListener("click", () => navigate("quiz-session", { cat: c.id }));
@@ -130,24 +178,24 @@ function renderQuizHome() {
   const view = el(`
     <div>
       <div class="card">
-        <h2>Choisis un thème</h2>
-        <p>Chaque session mélange les questions du thème choisi. Réponds, lis l'explication, puis passe à la suivante.</p>
+        <h2>${t("quizHomeTitle")}</h2>
+        <p>${t("quizHomeBody")}</p>
       </div>
-      <div class="section-title">Thèmes</div>
+      <div class="section-title">${t("sectionThemesLabel")}</div>
       <div class="cat-grid" id="quiz-cat-grid"></div>
-      <div class="section-title">Ou</div>
-      <button class="btn btn-primary btn-block" id="quiz-all-btn">Session mélangée — toutes catégories</button>
+      <div class="section-title">${t("orLabel")}</div>
+      <button class="btn btn-primary btn-block" id="quiz-all-btn">${t("allCategoriesBtn")}</button>
     </div>
   `);
 
   const grid = view.querySelector("#quiz-cat-grid");
-  CATEGORIES.forEach((c) => {
+  data().categories.forEach((c) => {
     const s = categoryStats(c.id);
     const tile = el(`
       <button class="cat-tile" style="background:${c.color}">
         <span class="cat-icon">${c.icon}</span>
         <span class="cat-label">${c.label}</span>
-        <span class="cat-meta">${s.total} questions</span>
+        <span class="cat-meta">${s.total} ${t("questionsSuffix")}</span>
       </button>
     `);
     tile.addEventListener("click", () => navigate("quiz-session", { cat: c.id }));
@@ -161,15 +209,15 @@ function renderQuizHome() {
 
 function renderQuizSession(params) {
   const catId = params.cat;
-  const pool = catId === "all" ? QUESTIONS : QUESTIONS.filter((q) => q.cat === catId);
+  const pool = catId === "all" ? data().questions : data().questions.filter((q) => q.cat === catId);
   const questions = shuffle(pool);
   let index = 0;
   let score = 0;
-  const info = catId === "all" ? { label: "Toutes catégories", icon: "🎯" } : catInfo(catId);
+  const info = catId === "all" ? { label: t("allCategoriesLabel"), icon: "🎯" } : catInfo(catId);
 
   const view = el(`
     <div>
-      <button class="back-link" id="quiz-back">← Retour aux thèmes</button>
+      <button class="back-link" id="quiz-back">${t("backToThemes")}</button>
       <div class="quiz-progress">
         <span>${info.icon} ${info.label}</span>
         <span id="quiz-counter"></span>
@@ -220,11 +268,11 @@ function renderQuizSession(params) {
 
     card.appendChild(el(`
       <div class="explanation">
-        <strong>${isCorrect ? "✅ Exact." : "❌ Pas tout à fait."}</strong> ${q.explanation}
+        <strong>${isCorrect ? t("correctFeedback") : t("incorrectFeedback")}</strong> ${q.explanation}
       </div>
     `));
 
-    const nextBtn = el(`<button class="btn btn-primary btn-block" style="margin-top:14px;">${index + 1 < questions.length ? "Question suivante" : "Voir le résultat"}</button>`);
+    const nextBtn = el(`<button class="btn btn-primary btn-block" style="margin-top:14px;">${index + 1 < questions.length ? t("nextQuestion") : t("seeResult")}</button>`);
     nextBtn.addEventListener("click", () => {
       index++;
       renderQuestion();
@@ -244,19 +292,19 @@ function renderQuizSession(params) {
     card.appendChild(el(`
       <div class="result-hero">
         <div class="result-score">${score} / ${questions.length}</div>
-        <div class="result-caption">${pct}% de bonnes réponses sur cette session</div>
+        <div class="result-caption">${pct}${t("resultCaptionSuffix")}</div>
       </div>
     `));
-    const again = el(`<button class="btn btn-primary btn-block" style="margin-top:12px;">Refaire une session</button>`);
+    const again = el(`<button class="btn btn-primary btn-block" style="margin-top:12px;">${t("againBtn")}</button>`);
     again.addEventListener("click", () => navigate("quiz-session", params));
-    const back = el(`<button class="btn btn-ghost btn-block" style="margin-top:8px;">Retour aux thèmes</button>`);
+    const back = el(`<button class="btn btn-ghost btn-block" style="margin-top:8px;">${t("backThemesBtn")}</button>`);
     back.addEventListener("click", () => navigate("quiz"));
     card.appendChild(again);
     card.appendChild(back);
   }
 
   if (questions.length === 0) {
-    view.querySelector("#quiz-card").innerHTML = `<div class="empty-state">Aucune question dans ce thème pour l'instant.</div>`;
+    view.querySelector("#quiz-card").innerHTML = `<div class="empty-state">${t("emptyCategory")}</div>`;
   } else {
     renderQuestion();
   }
@@ -268,15 +316,15 @@ function renderMemo() {
   const view = el(`
     <div>
       <div class="card">
-        <h2>Fiches mémo</h2>
-        <p>Les points essentiels à retenir, par thème, pour réviser rapidement avant une session.</p>
+        <h2>${t("memoTitle")}</h2>
+        <p>${t("memoBody")}</p>
       </div>
       <div id="memo-list"></div>
     </div>
   `);
 
   const list = view.querySelector("#memo-list");
-  MEMO_CARDS.forEach((m) => {
+  data().memoCards.forEach((m) => {
     const c = catInfo(m.cat);
     const isWarning = m.id === "m-disclaimer";
     const card = el(`
@@ -296,27 +344,27 @@ function renderProgress() {
   const view = el(`
     <div>
       <div class="card">
-        <h2>Ta progression</h2>
-        <p>Basée sur les réponses données dans les sessions de révision, enregistrées uniquement sur cet appareil.</p>
+        <h2>${t("progressTitle")}</h2>
+        <p>${t("progressBody")}</p>
       </div>
       <div class="stat-row">
         <div class="stat-box">
           <div class="stat-value">${stats.mastered}/${stats.total}</div>
-          <div class="stat-label">Questions maîtrisées</div>
+          <div class="stat-label">${t("statMastered")}</div>
         </div>
         <div class="stat-box">
           <div class="stat-value">${state.progress.sessions || 0}</div>
-          <div class="stat-label">Sessions terminées</div>
+          <div class="stat-label">${t("sessionsCompleted")}</div>
         </div>
       </div>
-      <div class="section-title">Par thème</div>
+      <div class="section-title">${t("byTheme")}</div>
       <div class="card" id="progress-by-cat"></div>
-      <button class="btn btn-ghost btn-block" id="reset-progress" style="margin-top:16px;">Réinitialiser ma progression</button>
+      <button class="btn btn-ghost btn-block" id="reset-progress" style="margin-top:16px;">${t("resetBtn")}</button>
     </div>
   `);
 
   const byCat = view.querySelector("#progress-by-cat");
-  CATEGORIES.forEach((c) => {
+  data().categories.forEach((c) => {
     const s = categoryStats(c.id);
     const pct = s.total ? Math.round((s.mastered / s.total) * 100) : 0;
     byCat.appendChild(el(`
@@ -330,7 +378,7 @@ function renderProgress() {
   });
 
   view.querySelector("#reset-progress").addEventListener("click", () => {
-    if (confirm("Réinitialiser toute ta progression sur cet appareil ?")) {
+    if (confirm(t("resetConfirm"))) {
       state.progress = { results: {}, sessions: 0 };
       saveProgress(state.progress);
       navigate("progress");
@@ -364,6 +412,7 @@ function render() {
   viewEl.appendChild(content);
 }
 
+applyStaticI18n();
 navigate("home");
 
 // ---------------- PWA install prompt ----------------
