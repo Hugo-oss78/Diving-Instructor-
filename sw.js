@@ -1,4 +1,4 @@
-const CACHE_NAME = "instructor-prep-v3";
+const CACHE_NAME = "instructor-prep-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -29,10 +29,21 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
-  // Réseau en priorité (contenu toujours à jour dès qu'il y a du réseau),
-  // repli sur le cache uniquement si hors-ligne ou requête impossible.
+  // Réseau en priorité, en forçant le contournement du cache HTTP du
+  // navigateur (sinon "network-first" peut quand même renvoyer une
+  // réponse mise en cache par le navigateur lui-même, pas seulement
+  // par ce service worker). Repli sur le cache du service worker
+  // uniquement si hors-ligne ou requête impossible.
+  const freshRequest = new Request(event.request.url, {
+    method: event.request.method,
+    headers: event.request.headers,
+    mode: event.request.mode === "navigate" ? "same-origin" : event.request.mode,
+    credentials: event.request.credentials,
+    redirect: event.request.redirect,
+    cache: "no-store",
+  });
   event.respondWith(
-    fetch(event.request)
+    fetch(freshRequest)
       .then((response) => {
         if (response && response.status === 200) {
           const clone = response.clone();
