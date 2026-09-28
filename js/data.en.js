@@ -11,12 +11,12 @@
 // change.
 
 export const CATEGORIES = [
-  { id: "physique", label: "Physics", icon: "🌊", color: "#1d6fa5" },
-  { id: "physiologie", label: "Physiology & Accidents", icon: "🫁", color: "#c62828" },
-  { id: "materiel", label: "Equipment", icon: "🤿", color: "#2e7d32" },
-  { id: "planification", label: "Planning & Tables", icon: "🧭", color: "#6a4fb6" },
-  { id: "environnement", label: "Environment & Safety", icon: "🌐", color: "#00838f" },
-  { id: "ssi", label: "SSI Pathway & Teaching", icon: "🎓", color: "#ef6c00" },
+  { id: "physique", label: "Physics", color: "#1d6fa5" },
+  { id: "physiologie", label: "Physiology & Accidents", color: "#c62828" },
+  { id: "materiel", label: "Equipment", color: "#2e7d32" },
+  { id: "planification", label: "Planning & Tables", color: "#6a4fb6" },
+  { id: "environnement", label: "Environment & Safety", color: "#00838f" },
+  { id: "ssi", label: "SSI Pathway & Teaching", color: "#ef6c00" },
 ];
 
 export const QUESTIONS = [
@@ -978,7 +978,7 @@ export const MEMO_CARDS = [
       "Altitude diving: lower surface pressure → adapted procedures/tables needed.",
       "Multilevel diving: gradually ascending during the dive limits nitrogen buildup compared to a \"square\" profile.",
       "Adjustable computer conservatism: extra safety against individual variability (cold, age, fatigue...).",
-      "⚠️ Precise values (durations, depths, rates, ratios) must be checked in your current official SSI materials (manual, MySSI, your Instructor Trainer) — deliberately not reproduced here.",
+      "<strong>Important : </strong>Precise values (durations, depths, rates, ratios) must be checked in your current official SSI materials (manual, MySSI, your Instructor Trainer) — deliberately not reproduced here.",
     ],
   },
   {
@@ -1006,7 +1006,7 @@ export const MEMO_CARDS = [
       "Differentiation: adapt pace and exercises to each student's actual level, not one script for everyone.",
       "Buddy check before entering the water: spot oversights/issues beforehand.",
       "Group supervision (awareness): keep an overall view, not just focus on one student at a time.",
-      "⚠️ These are general teaching principles; your agency's precise procedures/checklists may have their own additional formalization worth knowing.",
+      "<strong>Important : </strong>These are general teaching principles; your agency's precise procedures/checklists may have their own additional formalization worth knowing.",
     ],
   },
   {
@@ -1020,13 +1020,13 @@ export const MEMO_CARDS = [
       "ITC Academic Sessions (10 numbered sessions): Overview of SSI, Duties of an SSI Professional, Program Administration, Academic Sessions, In-Water Teaching, Assistant Instructor Programs, The Open Water Diver Program, Open Water Instructor Specialties, Diver Stress & Rescue and Divemaster, The Business of Diving.",
       "Practical Application Sessions: workshops where the candidate actually teaches course segments (OWD, Nitrox, Stress & Rescue...) under supervision, with video analysis and debrief.",
       "An Open Water Instructor can then move on to Specialty Instructor, then Instructor Trainer (qualified to run ITCs and Instructor Crossovers).",
-      "⚠️ Structure and prerequisites confirmed on the official SSI portal and cross-checked with several SSI PRO partner centers (2026) — standards evolve and an Instructor Trainer may clarify details: always reconfirm with your center.",
+      "<strong>Important : </strong>Structure and prerequisites confirmed on the official SSI portal and cross-checked with several SSI PRO partner centers (2026) — standards evolve and an Instructor Trainer may clarify details: always reconfirm with your center.",
     ],
   },
   {
     id: "m-disclaimer",
     cat: "ssi",
-    title: "⚠️ Read before you study",
+    title: "Read before you study",
     bullets: [
       "This app is a PERSONAL revision tool, built independently. It is not edited, verified, or officially approved by SSI (Scuba Schools International).",
       "Physics/physiology/equipment questions reflect general knowledge common to all diving agencies.",
@@ -1037,7 +1037,7 @@ export const MEMO_CARDS = [
   {
     id: "m-sources",
     cat: "ssi",
-    title: "🔎 How this content was verified",
+    title: "How this content was verified",
     bullets: [
       "Every physics/physiology/safety fact was cross-checked against at least 2 independent, recognized sources: DAN (Divers Alert Network), Merck Manual, NCBI/PubMed, or official diving agency websites.",
       "The SSI pathway structure was verified on the official divessi.com site and cross-checked with other independent SSI training centers.",

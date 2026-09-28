@@ -10,6 +10,9 @@
   --good: #66bb6a;
   --bad: #ef5350;
   --warn: #ffb74d;
+  --gold: #f0c265;
+  --gold-strong: #ffd98a;
+  --cat-color: var(--accent-strong);
   --radius: 16px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -34,8 +37,47 @@ html, body {
   background: radial-gradient(1200px 600px at 50% -10%, var(--surface) 0%, var(--bg) 55%, var(--bg-deep) 100%);
 }
 
+/* Bannière illustrée (plongeur, corail, poissons, vague) — écho au thème
+   "Virage 27" : la scène se déploie au-dessus d'une ligne de vague. */
+.hero-banner {
+  position: relative;
+  padding-top: var(--safe-top);
+  background:
+    radial-gradient(120% 140% at 20% 0%, rgba(79,195,247,0.16), transparent 60%),
+    linear-gradient(180deg, #0a3255 0%, var(--surface) 55%, var(--bg) 100%);
+  overflow: hidden;
+}
+.hero-svg {
+  display: block;
+  width: 100%;
+  height: 140px;
+}
+.hero-bubbles circle { fill: rgba(234,243,251,0.35); }
+.hero-fish path, .hero-fish circle {
+  stroke: var(--gold);
+  fill: rgba(240,194,101,0.12);
+  stroke-width: 1.3;
+}
+.hero-diver path, .hero-diver circle, .hero-diver rect {
+  stroke: rgba(234,243,251,0.55);
+  fill: rgba(234,243,251,0.05);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero-coral path {
+  stroke: rgba(239,108,0,0.45);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  fill: none;
+}
+.hero-wave {
+  fill: var(--bg-deep);
+  opacity: 0.94;
+}
+
 .app-header {
-  padding: calc(14px + var(--safe-top)) 18px 14px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -76,13 +118,30 @@ html, body {
 .subtitle { margin: 2px 0 0; font-size: 0.78rem; color: var(--text-dim); }
 
 .view {
+  position: relative;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 16px 16px calc(104px + var(--safe-bottom));
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
+  transition: background 0.4s ease;
 }
+.view::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 220px;
+  background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--cat-color) 30%, transparent), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.4s ease;
+}
+.view > * { position: relative; z-index: 1; }
 
 /* "Liquid glass" floating tab bar: translucent, blurred, with a soft
    top sheen and edge highlight to mimic a frosted glass pane. */
@@ -137,13 +196,37 @@ html, body {
   transition: color 0.25s ease, background-color 0.25s ease;
 }
 
-.tab-icon { font-size: 1.25rem; }
+.tab-icon .icon { width: 21px; height: 21px; }
 
 .tab[aria-current="page"] {
-  color: #fff;
-  background: rgba(255,255,255,0.18);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  color: #1e1508;
+  background: linear-gradient(180deg, var(--gold-strong), var(--gold));
+  box-shadow:
+    0 0 14px 2px rgba(240,194,101,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.55);
 }
+
+/* Icônes SVG génériques (remplacent les emoji) */
+.icon { width: 20px; height: 20px; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+.icon-inline { width: 18px; height: 18px; margin-right: 8px; color: var(--accent); vertical-align: -3px; }
+.warning-card .icon-inline { color: var(--warn); }
+.review-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(240,194,101,0.16);
+  color: var(--gold-strong);
+  border: 1px solid rgba(240,194,101,0.4);
+  border-radius: 999px;
+  padding: 4px 10px 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(240,194,101,0.5);
+}
+.review-tag .icon { width: 14px; height: 14px; }
+.quiz-progress-label { display: flex; align-items: center; gap: 6px; }
+.quiz-progress-label .icon { width: 17px; height: 17px; color: var(--cat-color); }
 
 .btn {
   border: none;
@@ -157,15 +240,21 @@ html, body {
 .btn-ghost { background: transparent; color: var(--text-dim); }
 .btn-block { width: 100%; display: block; text-align: center; }
 
+/* Encadrés "glow" léger : fond légèrement translucide, fine bordure
+   lumineuse et halo doux — reste discret, pas de néon appuyé. */
 .card {
-  background: var(--surface);
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0) 40%), var(--surface);
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: var(--radius);
   padding: 16px;
   margin-bottom: 14px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  box-shadow:
+    0 4px 18px rgba(0,0,0,0.25),
+    0 0 26px -6px color-mix(in srgb, var(--cat-color) 45%, transparent);
 }
 
-.card h2 { margin: 0 0 8px; font-size: 1.05rem; }
+.card h2 { margin: 0 0 8px; font-size: 1.05rem; display: flex; align-items: center; }
 .card p { margin: 0; color: var(--text-dim); font-size: 0.9rem; line-height: 1.45; }
 
 .section-title {
@@ -184,6 +273,8 @@ html, body {
 }
 
 .cat-tile {
+  position: relative;
+  overflow: hidden;
   border-radius: 14px;
   padding: 14px;
   color: #fff;
@@ -195,8 +286,17 @@ html, body {
   flex-direction: column;
   gap: 6px;
   min-height: 84px;
+  box-shadow: 0 6px 18px -5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.28);
 }
-.cat-tile .cat-icon { font-size: 1.4rem; }
+.cat-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 15% -10%, rgba(255,255,255,0.35), transparent 55%);
+  pointer-events: none;
+}
+.cat-tile > * { position: relative; }
+.cat-tile .cat-icon .icon { width: 24px; height: 24px; }
 .cat-tile .cat-label { font-weight: 600; font-size: 0.88rem; }
 .cat-tile .cat-meta { font-size: 0.72rem; opacity: 0.85; }
 
@@ -250,13 +350,25 @@ html, body {
 .warning-card h2 { color: var(--warn); }
 
 .stat-row { display: flex; gap: 10px; margin-bottom: 14px; }
-.stat-box { flex: 1; background: var(--surface); border-radius: 14px; padding: 14px; text-align: center; }
-.stat-value { font-size: 1.5rem; font-weight: 700; }
+.stat-box {
+  flex: 1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0) 45%), var(--surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold-strong);
+  text-shadow: 0 0 18px rgba(240,194,101,0.45);
+}
 .stat-label { font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
 
 .cat-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.cat-progress-row .cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.cat-progress-row .cat-name { flex-basis: 130px; flex-shrink: 0; font-size: 0.85rem; }
+.cat-progress-row .cat-name-icon .icon { width: 18px; height: 18px; }
+.cat-progress-row .cat-name { flex-basis: 118px; flex-shrink: 0; font-size: 0.85rem; }
 .cat-progress-row .progress-bar-track { flex: 1; }
 .cat-progress-row .cat-pct { width: 40px; text-align: right; font-size: 0.8rem; color: var(--text-dim); }
 
@@ -268,7 +380,12 @@ html, body {
 }
 
 .result-hero { text-align: center; padding: 20px 0 8px; }
-.result-score { font-size: 2.4rem; font-weight: 800; }
+.result-score {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--gold-strong);
+  text-shadow: 0 0 24px rgba(240,194,101,0.5);
+}
 .result-caption { color: var(--text-dim); font-size: 0.9rem; }
 
 .install-toast {

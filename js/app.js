@@ -1,6 +1,7 @@
 import { CATEGORIES as CATEGORIES_FR, QUESTIONS as QUESTIONS_FR, MEMO_CARDS as MEMO_CARDS_FR } from "./data.js";
 import { CATEGORIES as CATEGORIES_EN, QUESTIONS as QUESTIONS_EN, MEMO_CARDS as MEMO_CARDS_EN } from "./data.en.js";
 import { UI } from "./i18n.js";
+import { icon } from "./icons.js";
 
 const STORAGE_KEY = "instructorPrepProgressV1";
 const LANG_KEY = "instructorPrepLang";
@@ -69,7 +70,17 @@ function shuffle(arr) {
 }
 
 function catInfo(id) {
-  return data().categories.find((c) => c.id === id) || { label: id, icon: "•", color: "#4fc3f7" };
+  return data().categories.find((c) => c.id === id) || { label: id, color: "#4fc3f7" };
+}
+
+/** Trie le paquet de questions en donnant la priorité aux questions pas
+ * encore maîtrisées (rappel actif : on s'entraîne davantage sur ce qu'on
+ * ne sait pas encore, principe central de la répétition espacée), tout
+ * en gardant un ordre aléatoire à l'intérieur de chaque groupe. */
+function prioritizeForRecall(questions) {
+  const notMastered = shuffle(questions.filter((q) => state.progress.results[q.id] !== true));
+  const mastered = shuffle(questions.filter((q) => state.progress.results[q.id] === true));
+  return [...notMastered, ...mastered];
 }
 
 function categoryStats(catId) {
@@ -99,6 +110,12 @@ function applyStaticI18n() {
   const toggleBtn = document.getElementById("lang-toggle");
   if (toggleLabel) toggleLabel.textContent = state.lang === "fr" ? "EN" : "FR";
   if (toggleBtn) toggleBtn.setAttribute("aria-label", t("langToggleAria"));
+}
+
+function hydrateStaticIcons() {
+  document.querySelectorAll("[data-icon]").forEach((elm) => {
+    elm.innerHTML = icon(elm.dataset.icon);
+  });
 }
 
 function navigate(route, params = {}) {
@@ -132,12 +149,12 @@ function renderHome() {
   const view = el(`
     <div>
       <div class="card warning-card">
-        <h2>${t("warningTitle")}</h2>
+        <h2>${icon("warning", "icon-inline")}${t("warningTitle")}</h2>
         <p>${t("warningBody")}</p>
       </div>
 
       <div class="card">
-        <h2>${t("welcomeTitle")}</h2>
+        <h2>${icon("diver", "icon-inline")}${t("welcomeTitle")}</h2>
         <p>${t("welcomeBody")}</p>
       </div>
 
@@ -162,7 +179,7 @@ function renderHome() {
     const s = categoryStats(c.id);
     const tile = el(`
       <button class="cat-tile" style="background:${c.color}">
-        <span class="cat-icon">${c.icon}</span>
+        <span class="cat-icon">${icon(c.id)}</span>
         <span class="cat-label">${c.label}</span>
         <span class="cat-meta">${s.mastered}/${s.total} ${t("masteredSuffix")}</span>
       </button>
@@ -193,7 +210,7 @@ function renderQuizHome() {
     const s = categoryStats(c.id);
     const tile = el(`
       <button class="cat-tile" style="background:${c.color}">
-        <span class="cat-icon">${c.icon}</span>
+        <span class="cat-icon">${icon(c.id)}</span>
         <span class="cat-label">${c.label}</span>
         <span class="cat-meta">${s.total} ${t("questionsSuffix")}</span>
       </button>
@@ -210,20 +227,22 @@ function renderQuizHome() {
 function renderQuizSession(params) {
   const catId = params.cat;
   const pool = catId === "all" ? data().questions : data().questions.filter((q) => q.cat === catId);
-  const questions = shuffle(pool);
+  const questions = prioritizeForRecall(pool);
   let index = 0;
   let score = 0;
-  const info = catId === "all" ? { label: t("allCategoriesLabel"), icon: "🎯" } : catInfo(catId);
+  const isAll = catId === "all";
+  const info = isAll ? { label: t("allCategoriesLabel"), color: "var(--accent-strong)" } : catInfo(catId);
+  const infoIcon = isAll ? icon("target") : icon(catId);
 
   const view = el(`
-    <div>
+    <div style="--cat-color:${info.color}">
       <button class="back-link" id="quiz-back">${t("backToThemes")}</button>
       <div class="quiz-progress">
-        <span>${info.icon} ${info.label}</span>
+        <span class="quiz-progress-label">${infoIcon}${info.label}</span>
         <span id="quiz-counter"></span>
       </div>
       <div class="progress-bar-track" style="margin-bottom:16px;">
-        <div class="progress-bar-fill" id="quiz-bar" style="width:0%"></div>
+        <div class="progress-bar-fill" id="quiz-bar" style="width:0%; background:${info.color}"></div>
       </div>
       <div class="card" id="quiz-card"></div>
     </div>
@@ -242,6 +261,9 @@ function renderQuizSession(params) {
 
     const card = view.querySelector("#quiz-card");
     card.innerHTML = "";
+    if (state.progress.results[q.id] === false) {
+      card.appendChild(el(`<span class="review-tag">${icon("repeat")}${t("reviewTag")}</span>`));
+    }
     card.appendChild(el(`<p class="question-text">${q.q}</p>`));
 
     const choicesWrap = el(`<div></div>`);
@@ -327,9 +349,11 @@ function renderMemo() {
   data().memoCards.forEach((m) => {
     const c = catInfo(m.cat);
     const isWarning = m.id === "m-disclaimer";
+    const isSources = m.id === "m-sources";
+    const cardIcon = isWarning ? icon("warning") : isSources ? icon("search") : icon(m.cat);
     const card = el(`
       <div class="card memo-card ${isWarning ? "warning-card" : ""}" ${!isWarning ? `style="border-left-color:${c.color}"` : ""}>
-        <h2>${isWarning ? "" : c.icon + " "}${m.title}</h2>
+        <h2>${cardIcon}${m.title}</h2>
         <ul>${m.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
       </div>
     `);
@@ -369,8 +393,8 @@ function renderProgress() {
     const pct = s.total ? Math.round((s.mastered / s.total) * 100) : 0;
     byCat.appendChild(el(`
       <div class="cat-progress-row">
-        <span class="cat-dot" style="background:${c.color}"></span>
-        <span class="cat-name">${c.icon} ${c.label}</span>
+        <span class="cat-name-icon" style="color:${c.color}">${icon(c.id)}</span>
+        <span class="cat-name">${c.label}</span>
         <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;background:${c.color}"></div></div>
         <span class="cat-pct">${pct}%</span>
       </div>
@@ -391,6 +415,11 @@ function renderProgress() {
 function render() {
   const viewEl = document.getElementById("view");
   viewEl.innerHTML = "";
+  if (state.route === "quiz-session" && state.params.cat && state.params.cat !== "all") {
+    viewEl.style.setProperty("--cat-color", catInfo(state.params.cat).color);
+  } else {
+    viewEl.style.removeProperty("--cat-color");
+  }
   let content;
   switch (state.route) {
     case "quiz":
@@ -413,6 +442,7 @@ function render() {
 }
 
 applyStaticI18n();
+hydrateStaticIcons();
 navigate("home");
 
 // ---------------- PWA install prompt ----------------

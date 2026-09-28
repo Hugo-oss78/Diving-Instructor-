@@ -11,12 +11,12 @@
 // ici quand elles sont spécifiques à SSI ou sujettes à changement.
 
 export const CATEGORIES = [
-  { id: "physique", label: "Physique", icon: "🌊", color: "#1d6fa5" },
-  { id: "physiologie", label: "Physiologie & accidents", icon: "🫁", color: "#c62828" },
-  { id: "materiel", label: "Matériel", icon: "🤿", color: "#2e7d32" },
-  { id: "planification", label: "Planification & tables", icon: "🧭", color: "#6a4fb6" },
-  { id: "environnement", label: "Environnement & sécurité", icon: "🌐", color: "#00838f" },
-  { id: "ssi", label: "Parcours & pédagogie SSI", icon: "🎓", color: "#ef6c00" },
+  { id: "physique", label: "Physique", color: "#1d6fa5" },
+  { id: "physiologie", label: "Physiologie & accidents", color: "#c62828" },
+  { id: "materiel", label: "Matériel", color: "#2e7d32" },
+  { id: "planification", label: "Planification & tables", color: "#6a4fb6" },
+  { id: "environnement", label: "Environnement & sécurité", color: "#00838f" },
+  { id: "ssi", label: "Parcours & pédagogie SSI", color: "#ef6c00" },
 ];
 
 export const QUESTIONS = [
@@ -983,7 +983,7 @@ export const MEMO_CARDS = [
       "Plongée en altitude : pression de surface plus basse → procédures/tables adaptées nécessaires.",
       "Plongée multi-niveaux : remonter progressivement pendant la plongée limite l'accumulation d'azote par rapport à un profil « carré ».",
       "Conservatisme réglable sur ordinateur : sécurité supplémentaire face à la variabilité individuelle (froid, âge, fatigue...).",
-      "⚠️ Les valeurs précises (durées, profondeurs, vitesses, ratios) doivent être vérifiées dans ton support SSI officiel à jour (manuel, MySSI, ton Instructor Trainer) — volontairement non reproduites ici.",
+      "<strong>Important : </strong>Les valeurs précises (durées, profondeurs, vitesses, ratios) doivent être vérifiées dans ton support SSI officiel à jour (manuel, MySSI, ton Instructor Trainer) — volontairement non reproduites ici.",
     ],
   },
   {
@@ -1011,7 +1011,7 @@ export const MEMO_CARDS = [
       "Différenciation : adapter rythme et exercices au niveau réel de chaque élève, pas un déroulé unique pour tous.",
       "Vérification mutuelle du matériel (buddy check) avant la mise à l'eau : repérer les oublis/anomalies en amont.",
       "Supervision de groupe (awareness) : garder une vision d'ensemble, pas seulement se concentrer sur un élève à la fois.",
-      "⚠️ Ce sont des principes pédagogiques généraux ; les procédures/checklists précises de ton organisme peuvent avoir leur propre formalisation à connaître en plus.",
+      "<strong>Important : </strong>Ce sont des principes pédagogiques généraux ; les procédures/checklists précises de ton organisme peuvent avoir leur propre formalisation à connaître en plus.",
     ],
   },
   {
@@ -1025,13 +1025,13 @@ export const MEMO_CARDS = [
       "Academic Sessions de l'ITC (10 sessions numérotées) : Overview of SSI, Duties of an SSI Professional, Program Administration, Academic Sessions, In-Water Teaching, Assistant Instructor Programs, The Open Water Diver Program, Open Water Instructor Specialties, Diver Stress & Rescue and Divemaster, The Business of Diving.",
       "Practical Application Sessions : ateliers où le candidat enseigne réellement des segments de cours (OWD, Nitrox, Stress & Rescue...) sous supervision, avec analyse vidéo et débrief.",
       "Un Open Water Instructor peut ensuite évoluer vers Specialty Instructor, puis Instructor Trainer (habilité à conduire des ITC et Instructor Crossovers).",
-      "⚠️ Structure et prérequis confirmés sur le portail officiel SSI et recoupés avec plusieurs centres partenaires SSI PRO (2026) — les standards évoluent et un Instructor Trainer peut préciser des points : reconfirme toujours auprès de ton centre.",
+      "<strong>Important : </strong>Structure et prérequis confirmés sur le portail officiel SSI et recoupés avec plusieurs centres partenaires SSI PRO (2026) — les standards évoluent et un Instructor Trainer peut préciser des points : reconfirme toujours auprès de ton centre.",
     ],
   },
   {
     id: "m-disclaimer",
     cat: "ssi",
-    title: "⚠️ À lire avant de réviser",
+    title: "À lire avant de réviser",
     bullets: [
       "Cette application est un outil de révision PERSONNEL, créé indépendamment. Elle n'est pas éditée, vérifiée ni approuvée officiellement par SSI (Scuba Schools International).",
       "Les questions de physique/physiologie/matériel reflètent des connaissances générales communes à tous les organismes de plongée.",
@@ -1042,7 +1042,7 @@ export const MEMO_CARDS = [
   {
     id: "m-sources",
     cat: "ssi",
-    title: "🔎 Comment ce contenu a été vérifié",
+    title: "Comment ce contenu a été vérifié",
     bullets: [
       "Chaque fait de physique/physiologie/sécurité a été recoupé avec au moins 2 sources indépendantes et reconnues : DAN (Divers Alert Network), Merck Manual, NCBI/PubMed, ou sites officiels des organismes de plongée.",
       "La structure du parcours SSI a été vérifiée sur le site officiel divessi.com et recoupée avec d'autres centres de formation SSI indépendants.",

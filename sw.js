@@ -1,4 +1,4 @@
-const CACHE_NAME = "instructor-prep-v4";
+const CACHE_NAME = "instructor-prep-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -8,6 +8,7 @@ const ASSETS = [
   "./js/data.js",
   "./js/data.en.js",
   "./js/i18n.js",
+  "./js/icons.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",
   "./icons/icon-maskable-512.png",

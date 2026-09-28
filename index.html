@@ -13,6 +13,44 @@
 </head>
 <body>
   <div id="app">
+    <div class="hero-banner" aria-hidden="true">
+      <svg class="hero-svg" viewBox="0 0 400 150" preserveAspectRatio="xMidYMax slice">
+        <!-- bulles -->
+        <g class="hero-bubbles">
+          <circle cx="26" cy="22" r="3.2"/>
+          <circle cx="46" cy="38" r="2"/>
+          <circle cx="64" cy="16" r="1.6"/>
+          <circle cx="150" cy="20" r="2.4"/>
+          <circle cx="128" cy="42" r="1.4"/>
+          <circle cx="330" cy="26" r="2.2"/>
+          <circle cx="352" cy="44" r="1.5"/>
+        </g>
+        <!-- poissons -->
+        <g class="hero-fish">
+          <path d="M300,58 C310,50 328,50 337,58 C328,66 310,66 300,58 Z M300,58 L288,50 L288,66 Z"/>
+          <circle cx="329" cy="56" r="1" fill="currentColor" stroke="none"/>
+          <path d="M92,72 C100,66 113,66 120,72 C113,78 100,78 92,72 Z M92,72 L83,66 L83,78 Z"/>
+          <circle cx="114" cy="70.5" r="0.9" fill="currentColor" stroke="none"/>
+        </g>
+        <!-- plongeur (masque + tuba + ligne de corps/palme, style épuré) -->
+        <g class="hero-diver">
+          <circle cx="232" cy="44" r="9.5"/>
+          <path d="M240.5 36.5c2.8.5 4.4 3 4.4 6"/>
+          <path d="M223.5 51c-4 10-2.5 21 5.5 30c5.5 6.2 14 8 20.5 6"/>
+          <path d="M243 82c3.5 2.4 8 2.6 12.5.8"/>
+        </g>
+        <!-- corail -->
+        <g class="hero-coral">
+          <path d="M18,132 C16,116 24,108 20,94"/>
+          <path d="M30,132 C30,119 39,113 35,99"/>
+          <path d="M42,132 C44,122 52,119 50,108"/>
+          <path d="M362,132 C364,118 356,111 360,98"/>
+          <path d="M350,132 C349,121 342,116 345,104"/>
+        </g>
+        <!-- vague -->
+        <path class="hero-wave" d="M0,122 C36,108 72,108 108,122 C144,136 180,136 216,122 C252,108 288,108 324,122 C348,131 376,131 400,120 L400,150 L0,150 Z"/>
+      </svg>
+    </div>
     <header class="app-header">
       <div class="brand">
         <span class="brand-flag" aria-hidden="true"></span>
@@ -31,21 +69,22 @@
     <nav class="tabbar" aria-label="Navigation principale">
       <div class="tabbar-glass" aria-hidden="true"></div>
       <button class="tab" data-route="home" aria-current="page">
-        <span class="tab-icon">🏠</span><span data-i18n="navHome">Accueil</span>
+        <span class="tab-icon" data-icon="home"></span><span data-i18n="navHome">Accueil</span>
       </button>
       <button class="tab" data-route="quiz">
-        <span class="tab-icon">📝</span><span data-i18n="navQuiz">Réviser</span>
+        <span class="tab-icon" data-icon="quiz"></span><span data-i18n="navQuiz">Réviser</span>
       </button>
       <button class="tab" data-route="memo">
-        <span class="tab-icon">📌</span><span data-i18n="navMemo">Fiches mémo</span>
+        <span class="tab-icon" data-icon="memo"></span><span data-i18n="navMemo">Fiches mémo</span>
       </button>
       <button class="tab" data-route="progress">
-        <span class="tab-icon">📊</span><span data-i18n="navProgress">Progression</span>
+        <span class="tab-icon" data-icon="progress"></span><span data-i18n="navProgress">Progression</span>
       </button>
     </nav>
   </div>
 
   <div id="install-toast" class="install-toast" hidden>
+    <span class="install-toast-icon" data-icon="install"></span>
     <span data-i18n="installToast">Installer Instructor Prep sur cet appareil ?</span>
     <div class="install-toast-actions">
       <button id="install-btn" class="btn btn-primary" data-i18n="installBtn">Installer</button>
