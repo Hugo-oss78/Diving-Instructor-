@@ -11,8 +11,6 @@ export const UI = {
     installBtn: "Installer",
     installDismiss: "Plus tard",
 
-    warningTitle: "Avant de commencer",
-    warningBody: "Cette appli est un outil de révision personnel, non affilié ni approuvé officiellement par SSI. Pour toute donnée précise (ratios, standards, procédures d'examen), vérifie toujours ton SSI Instructor Manual / MySSI et les indications de ton Instructor Trainer.",
     welcomeTitle: "Bienvenue",
     welcomeBody: "Prépare ton monitorat de plongée (parcours SSI) : révise par catégorie, consulte les fiches mémo, et suis ta progression au fil des sessions.",
     statMastered: "Questions maîtrisées",
@@ -61,8 +59,6 @@ export const UI = {
     installBtn: "Install",
     installDismiss: "Later",
 
-    warningTitle: "Before you start",
-    warningBody: "This app is a personal revision tool, not affiliated with or officially approved by SSI. For any precise figures (ratios, standards, exam procedures), always check your SSI Instructor Manual / MySSI and your Instructor Trainer's guidance.",
     welcomeTitle: "Welcome",
     welcomeBody: "Prepare for your dive instructor certification (SSI pathway): study by category, browse the cheat sheets, and track your progress across sessions.",
     statMastered: "Questions mastered",

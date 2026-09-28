@@ -148,11 +148,6 @@ function renderHome() {
   const pct = stats.total ? Math.round((stats.mastered / stats.total) * 100) : 0;
   const view = el(`
     <div>
-      <div class="card warning-card">
-        <h2>${icon("warning", "icon-inline")}${t("warningTitle")}</h2>
-        <p>${t("warningBody")}</p>
-      </div>
-
       <div class="card">
         <h2>${icon("diver", "icon-inline")}${t("welcomeTitle")}</h2>
         <p>${t("welcomeBody")}</p>
