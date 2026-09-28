@@ -353,10 +353,13 @@ function renderMemo() {
     const isSources = m.id === "m-sources";
     const cardIcon = isWarning ? icon("warning") : isSources ? icon("search") : icon(m.cat);
     const card = el(`
-      <div class="card memo-card ${isWarning ? "warning-card" : ""}" ${!isWarning ? `style="border-left-color:${c.color}"` : ""}>
-        <h2>${cardIcon}${m.title}</h2>
+      <details class="card memo-card ${isWarning ? "warning-card" : ""}" ${!isWarning ? `style="border-left-color:${c.color}"` : ""}>
+        <summary>
+          <h2>${cardIcon}${m.title}</h2>
+          <span class="memo-chevron">${icon("chevron")}</span>
+        </summary>
         <ul>${m.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
-      </div>
+      </details>
     `);
     list.appendChild(card);
   });

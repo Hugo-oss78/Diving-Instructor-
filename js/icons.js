@@ -34,6 +34,8 @@ const PATHS = {
   install: `<path d="M12 4v11.5"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 18.5h14"/>`,
 
   diver: `<circle cx="12" cy="10.5" r="6"/><path d="M16.6 8.2c1.8.3 2.7 1.8 2.7 3.6"/><path d="M9 21c.5-2 1.8-3 3-3s2.5 1 3 3"/>`,
+
+  chevron: `<path d="M7 9.5 12 14.5 17 9.5"/>`,
 };
 
 export function icon(name, className = "") {

@@ -341,8 +341,24 @@ html, body {
   line-height: 1.45;
 }
 
-.memo-card { border-left: 4px solid var(--accent); }
-.memo-card ul { margin: 8px 0 0; padding-left: 18px; }
+/* Fiches mémo repliables : titre + icône visibles, contenu masqué
+   jusqu'au clic (élément <details> natif, accessible au clavier). */
+.memo-card { border-left: 4px solid var(--accent); padding: 0; overflow: hidden; }
+.memo-card summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.memo-card summary::-webkit-details-marker { display: none; }
+.memo-card summary h2 { margin: 0; flex: 1; }
+.memo-chevron { color: var(--text-dim); transition: transform 0.25s ease; flex-shrink: 0; }
+.memo-chevron .icon { width: 18px; height: 18px; }
+.memo-card[open] .memo-chevron { transform: rotate(180deg); color: var(--gold); }
+.memo-card ul { margin: 0; padding: 0 16px 16px 34px; }
 .memo-card li { margin-bottom: 8px; font-size: 0.88rem; line-height: 1.45; color: var(--text-dim); }
 .memo-card li:last-child { margin-bottom: 0; }
 
