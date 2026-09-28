@@ -101,6 +101,10 @@ function el(html) {
   return tpl.content.firstElementChild;
 }
 
+function scrollViewTop() {
+  document.getElementById("view").scrollTop = 0;
+}
+
 function applyStaticI18n() {
   document.documentElement.lang = t("htmlLang");
   document.querySelectorAll("[data-i18n]").forEach((elm) => {
@@ -250,6 +254,7 @@ function renderQuizSession(params) {
       renderResult();
       return;
     }
+    scrollViewTop();
     const q = questions[index];
     view.querySelector("#quiz-counter").textContent = `${index + 1} / ${questions.length}`;
     view.querySelector("#quiz-bar").style.width = `${(index / questions.length) * 100}%`;
@@ -298,6 +303,7 @@ function renderQuizSession(params) {
   }
 
   function renderResult() {
+    scrollViewTop();
     view.querySelector("#quiz-bar").style.width = "100%";
     view.querySelector("#quiz-counter").textContent = `${questions.length} / ${questions.length}`;
     state.progress.sessions = (state.progress.sessions || 0) + 1;
