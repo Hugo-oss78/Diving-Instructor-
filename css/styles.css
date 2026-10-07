@@ -418,6 +418,57 @@ html, body {
 .install-toast-actions { display: flex; gap: 8px; flex-shrink: 0; }
 .install-toast[hidden] { display: none; }
 
+/* ---------------- Entraînement / apnée ---------------- */
+
+.safety-list { margin: 8px 0 0; padding-left: 18px; }
+.safety-list li { margin-bottom: 8px; font-size: 0.88rem; line-height: 1.45; color: var(--text-dim); }
+.safety-list li:last-child { margin-bottom: 0; }
+
+.apnea-plan {
+  margin-top: 8px !important;
+  font-size: 0.82rem !important;
+  color: var(--text) !important;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.breathing-card { text-align: center; }
+.breath-stage { padding: 18px 0 6px; }
+.breath-circle-wrap {
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.breath-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--accent), var(--accent-strong));
+  box-shadow: 0 0 40px 6px rgba(79,195,247,0.45);
+  transition: transform 3s ease-in-out;
+  transform: scale(1);
+}
+.breath-label { margin-top: 18px; font-size: 1.1rem; font-weight: 700; }
+.breath-step { margin-top: 4px; font-size: 0.85rem; color: var(--text-dim); min-height: 1.2em; }
+.breath-actions { margin-top: 16px; }
+.breath-actions .btn { width: 100%; }
+
+.apnea-counter { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px; text-align: center; }
+.apnea-clock {
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 10px 0;
+  color: var(--gold-strong);
+  text-shadow: 0 0 24px rgba(240,194,101,0.5);
+  font-variant-numeric: tabular-nums;
+}
+.apnea-target { text-align: center; color: var(--text-dim); font-size: 0.85rem; margin-bottom: 14px !important; }
+.apnea-recovery-actions { display: flex; gap: 10px; margin-top: 14px; }
+.apnea-recovery-actions .btn { flex: 1; }
+
 @media (min-width: 480px) {
   .cat-grid { grid-template-columns: repeat(3, 1fr); }
 }

@@ -68,7 +68,10 @@ manifest.webmanifest     Métadonnées d'installation (PWA)
 sw.js                    Service worker (cache hors-ligne)
 css/styles.css           Styles
 js/app.js                Logique de l'appli (navigation, quiz, progression)
-js/data.js               Contenu : questions et fiches mémo
+js/data.js / data.en.js  Contenu : questions et fiches mémo (FR / EN)
+js/i18n.js               Textes d'interface (FR / EN)
+js/icons.js              Icônes SVG personnalisées
+js/apnea.js              Tables d'entraînement à l'apnée
 icons/                   Icônes de l'application
 ```
 
@@ -86,3 +89,8 @@ icons/                   Icônes de l'application
 - **Parcours & pédagogie SSI** : structure du cursus professionnel
   (Dive Control Specialist → ITC → IE → Open Water Instructor → Specialty
   Instructor → Instructor Trainer), rôle pédagogique de l'instructeur.
+- **Entraînement à l'apnée** : guide de respiration 3 temps, tables
+  progressives de tolérance au CO2/à l'hypoxie (chrono intégré, niveau
+  qui évolue selon la validation), toujours en version à sec/assise
+  avec rappels de sécurité (jamais seul en eau, pas d'hyperventilation,
+  12h d'attente après une plongée).

@@ -2,6 +2,7 @@ import { CATEGORIES as CATEGORIES_FR, QUESTIONS as QUESTIONS_FR, MEMO_CARDS as M
 import { CATEGORIES as CATEGORIES_EN, QUESTIONS as QUESTIONS_EN, MEMO_CARDS as MEMO_CARDS_EN } from "./data.en.js";
 import { UI } from "./i18n.js";
 import { icon } from "./icons.js";
+import { TABLES, loadApneaProgress, saveApneaProgress } from "./apnea.js";
 
 const STORAGE_KEY = "instructorPrepProgressV1";
 const LANG_KEY = "instructorPrepLang";
@@ -45,7 +46,20 @@ const state = {
   params: {},
   progress: loadProgress(),
   lang: loadLang(),
+  apneaProgress: loadApneaProgress(),
 };
+
+// Un seul minuteur actif à la fois (chrono d'apnée ou décompte de
+// récupération) : toujours le nettoyer avant d'en lancer un autre, et à
+// chaque navigation, pour ne jamais laisser un minuteur tourner dans le
+// vide sur une vue qui n'est plus affichée.
+let activeIntervalId = null;
+function clearActiveInterval() {
+  if (activeIntervalId !== null) {
+    clearInterval(activeIntervalId);
+    activeIntervalId = null;
+  }
+}
 
 const DATA_BY_LANG = {
   fr: { categories: CATEGORIES_FR, questions: QUESTIONS_FR, memoCards: MEMO_CARDS_FR },
@@ -123,10 +137,11 @@ function hydrateStaticIcons() {
 }
 
 function navigate(route, params = {}) {
+  clearActiveInterval();
   state.route = route;
   state.params = params;
   document.querySelectorAll(".tab").forEach((btn) => {
-    const isTop = ["home", "quiz", "memo", "progress"].includes(route) && btn.dataset.route === route;
+    const isTop = ["home", "quiz", "memo", "progress", "training"].includes(route) && btn.dataset.route === route;
     if (isTop) btn.setAttribute("aria-current", "page");
     else btn.removeAttribute("aria-current");
   });
@@ -416,6 +431,282 @@ function renderProgress() {
   return view;
 }
 
+// ---------------- TRAINING (apnée) ----------------
+
+function formatClock(totalSeconds) {
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function renderTrainingHub() {
+  const view = el(`
+    <div>
+      <div class="card warning-card">
+        <h2>${icon("warning", "icon-inline")}${t("trainingSafetyTitle")}</h2>
+        <ul class="safety-list">${t("trainingSafetyBullets").map((b) => `<li>${b}</li>`).join("")}</ul>
+      </div>
+
+      <div class="card">
+        <h2>${icon("timer", "icon-inline")}${t("trainingTitle")}</h2>
+        <p>${t("trainingIntro")}</p>
+      </div>
+
+      <div class="card" id="breathing-card">
+        <h2>${icon("breath", "icon-inline")}${t("breathingCardTitle")}</h2>
+        <p>${t("breathingCardDesc")}</p>
+        <button class="btn btn-primary btn-block" id="breathing-start-btn" style="margin-top:12px;">${t("breathingStartBtn")}</button>
+      </div>
+
+      <div id="table-cards"></div>
+    </div>
+  `);
+
+  view.querySelector("#breathing-start-btn").addEventListener("click", () => navigate("training-breathing"));
+
+  const tableCards = view.querySelector("#table-cards");
+  [
+    { type: "hypercapnie", nameKey: "hypercapnieName", descKey: "hypercapnieDesc" },
+    { type: "hypoxique", nameKey: "hypoxiqueName", descKey: "hypoxiqueDesc" },
+  ].forEach(({ type, nameKey, descKey }) => {
+    const table = TABLES[type];
+    const levelNum = Math.min(state.apneaProgress[type] || 1, table.levels.length);
+    const levelData = table.levels.find((l) => l.level === levelNum);
+    const card = el(`
+      <div class="card" style="border-left: 4px solid ${table.color}">
+        <h2>${t(nameKey)}</h2>
+        <p>${t(descKey)}</p>
+        <p class="apnea-plan">${t("levelLabel")} ${levelData.level} — ${levelData.reps} × ~${levelData.hold}s (${t("sessionPlanSuffix")}), ${levelData.series} ${t("seriesSuffix")}</p>
+        <button class="btn btn-primary btn-block apnea-start-btn" style="margin-top:4px;">${t("startSessionBtn")}</button>
+      </div>
+    `);
+    card.querySelector(".apnea-start-btn").addEventListener("click", () => navigate("training-session", { type }));
+    tableCards.appendChild(card);
+  });
+
+  return view;
+}
+
+function renderBreathingGuide() {
+  const STAGE_DURATION = 3;
+  const stages = [
+    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", scale: 1.15, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepChest", scale: 1.3, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", scale: 1.45, duration: STAGE_DURATION },
+    { labelKey: "breathingExhale", stepKey: null, scale: 1.0, duration: STAGE_DURATION * 2 },
+    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", scale: 1.15, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepChest", scale: 1.3, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", scale: 1.45, duration: STAGE_DURATION },
+  ];
+
+  const view = el(`
+    <div>
+      <button class="back-link" id="breathing-back">${t("backToTrainingBtn")}</button>
+      <div class="card breathing-card">
+        <h2>${icon("breath", "icon-inline")}${t("breathingGuideTitle")}</h2>
+        <div class="breath-stage">
+          <div class="breath-circle-wrap">
+            <div class="breath-circle" id="breath-circle"></div>
+          </div>
+          <div class="breath-label" id="breath-label"></div>
+          <div class="breath-step" id="breath-step"></div>
+        </div>
+        <div id="breath-actions" class="breath-actions"></div>
+      </div>
+    </div>
+  `);
+  view.querySelector("#breathing-back").addEventListener("click", () => navigate("training"));
+
+  const circle = view.querySelector("#breath-circle");
+  const labelEl = view.querySelector("#breath-label");
+  const stepEl = view.querySelector("#breath-step");
+  const actionsEl = view.querySelector("#breath-actions");
+
+  let stageIndex = 0;
+
+  function runStage() {
+    if (stageIndex >= stages.length) {
+      labelEl.textContent = t("breathingDone");
+      stepEl.textContent = "";
+      actionsEl.innerHTML = `
+        <button class="btn btn-primary btn-block" id="breath-restart">${t("breathingRestartBtn")}</button>
+        <button class="btn btn-ghost btn-block" id="breath-stop" style="margin-top:8px;">${t("breathingStopBtn")}</button>
+      `;
+      actionsEl.querySelector("#breath-restart").addEventListener("click", () => {
+        stageIndex = 0;
+        runStage();
+      });
+      actionsEl.querySelector("#breath-stop").addEventListener("click", () => navigate("training"));
+      return;
+    }
+    const stage = stages[stageIndex];
+    circle.style.transitionDuration = `${stage.duration}s`;
+    circle.style.transform = `scale(${stage.scale})`;
+    labelEl.textContent = t(stage.labelKey);
+    stepEl.textContent = stage.stepKey ? t(stage.stepKey) : "";
+    actionsEl.innerHTML = `<button class="btn btn-ghost btn-block" id="breath-stop">${t("breathingStopBtn")}</button>`;
+    actionsEl.querySelector("#breath-stop").addEventListener("click", () => navigate("training"));
+
+    clearActiveInterval();
+    activeIntervalId = setTimeout(() => {
+      stageIndex++;
+      runStage();
+    }, stage.duration * 1000);
+  }
+
+  runStage();
+
+  return view;
+}
+
+function renderApneaSession(params) {
+  const type = params.type === "hypoxique" ? "hypoxique" : "hypercapnie";
+  const table = TABLES[type];
+  const level = Math.min(state.apneaProgress[type] || 1, table.levels.length);
+  const levelData = table.levels.find((l) => l.level === level);
+
+  let repIndex = 1;
+  let seriesIndex = 1;
+  const holdLog = [];
+  let holdStartMs = 0;
+
+  const view = el(`
+    <div style="--cat-color:${table.color}">
+      <button class="back-link" id="apnea-back">${t("sessionStopBtn")}</button>
+      <div class="apnea-counter">
+        <span id="apnea-rep-counter"></span>
+      </div>
+      <div class="card" id="apnea-card"></div>
+    </div>
+  `);
+  view.querySelector("#apnea-back").addEventListener("click", () => navigate("training"));
+
+  function updateCounter() {
+    view.querySelector("#apnea-rep-counter").textContent =
+      `${t("repCounterPrefix")} ${repIndex}/${levelData.reps} — ${t("seriesCounterPrefix")} ${seriesIndex}/${levelData.series}`;
+  }
+
+  function renderBreathePhase() {
+    clearActiveInterval();
+    updateCounter();
+    const card = view.querySelector("#apnea-card");
+    card.innerHTML = `
+      <h2>${icon("breath", "icon-inline")}${t("phaseBreatheTitle")}</h2>
+      <p>${t("phaseBreatheHint")}</p>
+      <button class="btn btn-primary btn-block" id="apnea-ready-btn" style="margin-top:10px;">${t("readyHoldBtn")}</button>
+    `;
+    card.querySelector("#apnea-ready-btn").addEventListener("click", startHold);
+  }
+
+  function startHold() {
+    holdStartMs = Date.now();
+    const card = view.querySelector("#apnea-card");
+    card.innerHTML = `
+      <h2>${icon("timer", "icon-inline")}${t("phaseHoldTitle")}</h2>
+      <div class="apnea-clock" id="apnea-hold-clock">0:00</div>
+      <p class="apnea-target">${t("holdTargetPrefix")} ${formatClock(levelData.hold)} ${t("holdTargetSuffix")}</p>
+      <button class="btn btn-primary btn-block" id="apnea-stop-hold-btn">${t("stopHoldBtn")}</button>
+    `;
+    card.querySelector("#apnea-stop-hold-btn").addEventListener("click", stopHold);
+
+    clearActiveInterval();
+    activeIntervalId = setInterval(() => {
+      const elapsed = Math.round((Date.now() - holdStartMs) / 1000);
+      const clockEl = document.getElementById("apnea-hold-clock");
+      if (clockEl) clockEl.textContent = formatClock(elapsed);
+    }, 250);
+  }
+
+  function stopHold() {
+    clearActiveInterval();
+    const elapsed = Math.max(0, Math.round((Date.now() - holdStartMs) / 1000));
+    holdLog.push(elapsed);
+
+    if (repIndex < levelData.reps) {
+      startRecovery(levelData.recovery, false, () => {
+        repIndex++;
+        renderBreathePhase();
+      });
+    } else if (seriesIndex < levelData.series) {
+      startRecovery(levelData.seriesRecovery, true, () => {
+        seriesIndex++;
+        repIndex = 1;
+        renderBreathePhase();
+      });
+    } else {
+      renderDone();
+    }
+  }
+
+  function startRecovery(durationSeconds, isSeriesRecovery, onComplete) {
+    let remaining = durationSeconds;
+    const card = view.querySelector("#apnea-card");
+    const title = isSeriesRecovery ? t("seriesRecoveryTitle") : t("phaseRecoveryTitle");
+    card.innerHTML = `
+      <h2>${icon("timer", "icon-inline")}${title}</h2>
+      <div class="apnea-clock" id="apnea-recovery-clock">${formatClock(remaining)}</div>
+      <ul class="safety-list">
+        <li>${t("recoveryStep1")}</li>
+        <li>${t("recoveryStep2")}</li>
+        <li>${t("recoveryStep3")}</li>
+      </ul>
+      <div class="apnea-recovery-actions">
+        <button class="btn btn-ghost" id="apnea-add-time-btn">${t("addTimeBtn")}</button>
+        <button class="btn btn-primary" id="apnea-skip-btn">${t("skipRecoveryBtn")}</button>
+      </div>
+    `;
+    const clockEl = () => document.getElementById("apnea-recovery-clock");
+
+    function finish() {
+      clearActiveInterval();
+      onComplete();
+    }
+
+    card.querySelector("#apnea-add-time-btn").addEventListener("click", () => {
+      remaining += 30;
+      if (clockEl()) clockEl().textContent = formatClock(remaining);
+    });
+    card.querySelector("#apnea-skip-btn").addEventListener("click", finish);
+
+    clearActiveInterval();
+    activeIntervalId = setInterval(() => {
+      remaining--;
+      if (clockEl()) clockEl().textContent = formatClock(Math.max(0, remaining));
+      if (remaining <= 0) finish();
+    }, 1000);
+  }
+
+  function renderDone() {
+    clearActiveInterval();
+    view.querySelector("#apnea-rep-counter").textContent = "";
+    const card = view.querySelector("#apnea-card");
+    card.innerHTML = `
+      <h2>${t("sessionDoneTitle")}</h2>
+      <p>${t("sessionDoneBody")}</p>
+      <ul class="safety-list">${holdLog.map((s, i) => `<li>${t("repCounterPrefix")} ${i + 1} : ${formatClock(s)}</li>`).join("")}</ul>
+      <p style="margin-top:12px; font-weight:600;">${t("validateQuestion")}</p>
+      <button class="btn btn-primary btn-block" id="apnea-validate-yes">${t("validateYes")}</button>
+      <button class="btn btn-ghost btn-block" id="apnea-validate-no" style="margin-top:8px;">${t("validateNo")}</button>
+      <button class="btn btn-ghost btn-block" id="apnea-back-hub" style="margin-top:8px;">${t("backToTrainingBtn")}</button>
+    `;
+    card.querySelector("#apnea-validate-yes").addEventListener("click", () => {
+      const maxLevel = table.levels.length;
+      state.apneaProgress[type] = Math.min(level + 1, maxLevel);
+      saveApneaProgress(state.apneaProgress);
+      navigate("training");
+    });
+    card.querySelector("#apnea-validate-no").addEventListener("click", () => {
+      state.apneaProgress[type] = level;
+      saveApneaProgress(state.apneaProgress);
+      navigate("training");
+    });
+    card.querySelector("#apnea-back-hub").addEventListener("click", () => navigate("training"));
+  }
+
+  renderBreathePhase();
+  return view;
+}
+
 function render() {
   const viewEl = document.getElementById("view");
   viewEl.innerHTML = "";
@@ -437,6 +728,15 @@ function render() {
       break;
     case "progress":
       content = renderProgress();
+      break;
+    case "training":
+      content = renderTrainingHub();
+      break;
+    case "training-breathing":
+      content = renderBreathingGuide();
+      break;
+    case "training-session":
+      content = renderApneaSession(state.params);
       break;
     case "home":
     default:

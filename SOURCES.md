@@ -101,6 +101,36 @@ Wikipedia (dont les articles cités eux-mêmes des références).
   sont propres à chaque centre (non universels) et n'ont pas été repris
   dans l'app.
 
+## Entraînement à l'apnée (onglet « Entraînement »)
+
+- Les 4 axes d'entraînement, le principe 30% hypoxique / 70%
+  hypercapnique, la respiration 3 temps (ventre → cage thoracique →
+  clavicules), la ventilation post-apnée (« petit chien » puis
+  respirations amples puis normale), et les tables progressives
+  CO2/O2 (niveaux, durées, récupérations) : document fourni par
+  l'utilisateur, *« Apnée — Entraînement en apnée pour le cursus
+  plongée »* (V. Perret). Les tables reprises dans l'app sont celles
+  « squat » du document, adaptées en version à sec/assise pour un usage
+  au calme guidé par l'appli (durées de maintien et récupérations
+  identiques ; seule la posture change).
+- Règle d'interdiction de l'apnée dans les 12 heures suivant une
+  plongée : *« Mémento DP 2024 »* (mémento d'une unité professionnelle
+  de plongée, Gendarmerie Nationale), fiche P-6 — fourni par
+  l'utilisateur.
+- Danger de l'hyperventilation avant une apnée (syncope hypoxique sans
+  signe avant-coureur) : déjà vérifié précédemment via
+  [Wikipedia – Shallow-water blackout](https://en.wikipedia.org/wiki/Shallow-water_blackout)
+  et [NCBI/StatPearls – Shallow Water Blackout](https://www.ncbi.nlm.nih.gov/books/NBK554620/)
+  (voir section Physiologie ci-dessus) — cohérent avec la consigne du
+  document source de ne jamais hyperventiler avant la première apnée.
+- ⚠️ Ces documents ne sont pas des publications académiques publiques :
+  ce sont des supports pédagogiques transmis par l'utilisatrice. Le
+  contenu a été adapté en version à sec par prudence (pas de
+  vérification possible d'une supervision réelle en milieu aquatique
+  par l'appli) ; les tables aquatiques du document original ne sont pas
+  reproduites ici. Pour aller plus loin ou pratiquer en eau, l'encadrement
+  par un moniteur d'apnée qualifié reste nécessaire.
+
 ## Ce qui n'a volontairement PAS été vérifié/ajouté
 
 Aucune valeur chiffrée propre aux standards SSI (ratios encadrant/élèves,

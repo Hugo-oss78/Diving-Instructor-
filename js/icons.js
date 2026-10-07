@@ -36,6 +36,14 @@ const PATHS = {
   diver: `<circle cx="12" cy="10.5" r="6"/><path d="M16.6 8.2c1.8.3 2.7 1.8 2.7 3.6"/><path d="M9 21c.5-2 1.8-3 3-3s2.5 1 3 3"/>`,
 
   chevron: `<path d="M7 9.5 12 14.5 17 9.5"/>`,
+
+  timer: `<circle cx="12" cy="13" r="8"/><path d="M12 13 15 10.3"/><path d="M12 3.3V5"/><path d="M9.3 3.3h5.4"/>`,
+
+  breath: `<path d="M12 4v5.5"/><circle cx="12" cy="3" r="1" fill="currentColor" stroke="none"/><path d="M12 9.5c-2.2 0-4 2-4 5 0 2.6 1.8 4 4 4s4-1.4 4-4"/>`,
+
+  play: `<path d="M8 5.5v13l11-6.5z"/>`,
+
+  pause: `<path d="M8 5.5v13"/><path d="M16 5.5v13"/>`,
 };
 
 export function icon(name, className = "") {
