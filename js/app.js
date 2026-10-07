@@ -487,16 +487,24 @@ function renderTrainingHub() {
   return view;
 }
 
+const BODY_DIAGRAM_SVG = `
+<svg viewBox="0 0 120 200" class="body-diagram" aria-hidden="true">
+  <path class="body-outline" d="M60 8c-9 0-16 7-16 16v5c-13 4-23 15-25 29l-7 46c-2 13 4 24 15 28v33c0 11 9 20 20 20h26c11 0 20-9 20-20v-33c11-4 17-15 15-28l-7-46c-2-14-12-25-25-29v-5c0-9-7-16-16-16z"/>
+  <path class="body-zone zone-shoulders" d="M25 44c11-10 23-15 35-15s24 5 35 15l-5 16c-9-8-19-13-30-13s-21 5-30 13z"/>
+  <ellipse class="body-zone zone-chest" cx="60" cy="95" rx="33" ry="33"/>
+  <ellipse class="body-zone zone-belly" cx="60" cy="152" rx="28" ry="30"/>
+</svg>`;
+
 function renderBreathingGuide() {
   const STAGE_DURATION = 3;
   const stages = [
-    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", scale: 1.15, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepChest", scale: 1.3, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", scale: 1.45, duration: STAGE_DURATION },
-    { labelKey: "breathingExhale", stepKey: null, scale: 1.0, duration: STAGE_DURATION * 2 },
-    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", scale: 1.15, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepChest", scale: 1.3, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", scale: 1.45, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", zone: "belly", scale: 1.0, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepChest", zone: "chest", scale: 1.25, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", zone: "shoulders", scale: 1.5, duration: STAGE_DURATION },
+    { labelKey: "breathingExhale", stepKey: null, zone: null, scale: 0.75, duration: STAGE_DURATION * 2 },
+    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", zone: "belly", scale: 1.0, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepChest", zone: "chest", scale: 1.25, duration: STAGE_DURATION },
+    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", zone: "shoulders", scale: 1.5, duration: STAGE_DURATION },
   ];
 
   const view = el(`
@@ -505,8 +513,11 @@ function renderBreathingGuide() {
       <div class="card breathing-card">
         <h2>${icon("breath", "icon-inline")}${t("breathingGuideTitle")}</h2>
         <div class="breath-stage">
-          <div class="breath-circle-wrap">
-            <div class="breath-circle" id="breath-circle"></div>
+          <div class="breath-visuals">
+            <div class="breath-circle-wrap">
+              <div class="breath-circle" id="breath-circle"></div>
+            </div>
+            <div class="breath-body-wrap" id="breath-body">${BODY_DIAGRAM_SVG}</div>
           </div>
           <div class="breath-label" id="breath-label"></div>
           <div class="breath-step" id="breath-step"></div>
@@ -518,9 +529,15 @@ function renderBreathingGuide() {
   view.querySelector("#breathing-back").addEventListener("click", () => navigate("training"));
 
   const circle = view.querySelector("#breath-circle");
+  const bodyWrap = view.querySelector("#breath-body");
   const labelEl = view.querySelector("#breath-label");
   const stepEl = view.querySelector("#breath-step");
   const actionsEl = view.querySelector("#breath-actions");
+
+  function setActiveZone(zone) {
+    bodyWrap.querySelectorAll(".body-zone").forEach((z) => z.classList.remove("active"));
+    if (zone) bodyWrap.querySelector(`.zone-${zone}`)?.classList.add("active");
+  }
 
   let stageIndex = 0;
 
@@ -528,6 +545,7 @@ function renderBreathingGuide() {
     if (stageIndex >= stages.length) {
       labelEl.textContent = t("breathingDone");
       stepEl.textContent = "";
+      setActiveZone(null);
       actionsEl.innerHTML = `
         <button class="btn btn-primary btn-block" id="breath-restart">${t("breathingRestartBtn")}</button>
         <button class="btn btn-ghost btn-block" id="breath-stop" style="margin-top:8px;">${t("breathingStopBtn")}</button>
@@ -544,6 +562,7 @@ function renderBreathingGuide() {
     circle.style.transform = `scale(${stage.scale})`;
     labelEl.textContent = t(stage.labelKey);
     stepEl.textContent = stage.stepKey ? t(stage.stepKey) : "";
+    setActiveZone(stage.zone);
     actionsEl.innerHTML = `<button class="btn btn-ghost btn-block" id="breath-stop">${t("breathingStopBtn")}</button>`;
     actionsEl.querySelector("#breath-stop").addEventListener("click", () => navigate("training"));
 
