@@ -144,17 +144,21 @@ html, body {
 .view > * { position: relative; z-index: 1; }
 
 /* "Liquid glass" floating tab bar: translucent, blurred, with a soft
-   top sheen and edge highlight to mimic a frosted glass pane. */
+   top sheen and edge highlight to mimic a frosted glass pane. Sized to
+   its content (icons only, no visible labels) so it stays a compact
+   floating pill instead of stretching edge-to-edge — important once
+   there are 5+ tabs, since long French labels ("Entraînement",
+   "Fiches mémo") would otherwise overflow or force wrapping. */
 .tabbar {
   position: fixed;
-  left: 16px;
-  right: 16px;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: calc(14px + var(--safe-bottom));
   z-index: 40;
-  max-width: 688px;
-  margin: 0 auto;
+  width: max-content;
+  max-width: calc(100vw - 24px);
   display: flex;
-  gap: 4px;
+  gap: 2px;
   padding: 6px;
   border-radius: 26px;
   background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04) 60%),
@@ -181,22 +185,34 @@ html, body {
 .tab {
   position: relative;
   z-index: 1;
-  flex: 1;
+  flex-shrink: 0;
   background: none;
   border: none;
   border-radius: 20px;
   color: var(--text-dim);
-  padding: 9px 4px;
+  width: 48px;
+  height: 48px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
-  font-size: 0.72rem;
+  justify-content: center;
   cursor: pointer;
   transition: color 0.25s ease, background-color 0.25s ease;
 }
 
-.tab-icon .icon { width: 21px; height: 21px; }
+.tab-icon .icon { width: 22px; height: 22px; }
+
+/* Libellé gardé pour les lecteurs d'écran, masqué visuellement. */
+.tab-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 .tab[aria-current="page"] {
   color: #1e1508;
