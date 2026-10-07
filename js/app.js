@@ -439,6 +439,18 @@ function formatClock(totalSeconds) {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
+function simpleCard({ iconName, titleKey, descKey, btnKey, onClick }) {
+  const card = el(`
+    <div class="card">
+      <h2>${icon(iconName, "icon-inline")}${t(titleKey)}</h2>
+      <p>${t(descKey)}</p>
+      <button class="btn btn-primary btn-block" style="margin-top:12px;">${t(btnKey)}</button>
+    </div>
+  `);
+  card.querySelector("button").addEventListener("click", onClick);
+  return card;
+}
+
 function renderTrainingHub() {
   const view = el(`
     <div>
@@ -452,19 +464,33 @@ function renderTrainingHub() {
         <p>${t("trainingIntro")}</p>
       </div>
 
-      <div class="card" id="breathing-card">
-        <h2>${icon("breath", "icon-inline")}${t("breathingCardTitle")}</h2>
-        <p>${t("breathingCardDesc")}</p>
-        <button class="btn btn-primary btn-block" id="breathing-start-btn" style="margin-top:12px;">${t("breathingStartBtn")}</button>
-      </div>
+      <div class="section-title">${t("trainingSectionBreathing")}</div>
+      <div id="section-breathing"></div>
 
-      <div id="table-cards"></div>
+      <div class="section-title">${t("trainingSectionApnea")}</div>
+      <div id="section-apnea"></div>
+
+      <div class="section-title">${t("trainingSectionMobility")}</div>
+      <div id="section-mobility"></div>
     </div>
   `);
 
-  view.querySelector("#breathing-start-btn").addEventListener("click", () => navigate("training-breathing"));
+  view.querySelector("#section-breathing").append(
+    simpleCard({
+      iconName: "breath", titleKey: "breathingCardTitle", descKey: "breathingCardDesc", btnKey: "breathingStartBtn",
+      onClick: () => navigate("training-breathing"),
+    }),
+    simpleCard({
+      iconName: "physiologie", titleKey: "hemiCostalCardTitle", descKey: "hemiCostalCardDesc", btnKey: "hemiCostalStartBtn",
+      onClick: () => navigate("training-hemi"),
+    }),
+    simpleCard({
+      iconName: "physique", titleKey: "waveCardTitle", descKey: "waveCardDesc", btnKey: "waveStartBtn",
+      onClick: () => navigate("training-wave"),
+    }),
+  );
 
-  const tableCards = view.querySelector("#table-cards");
+  const apneaSection = view.querySelector("#section-apnea");
   [
     { type: "hypercapnie", nameKey: "hypercapnieName", descKey: "hypercapnieDesc" },
     { type: "hypoxique", nameKey: "hypoxiqueName", descKey: "hypoxiqueDesc" },
@@ -481,13 +507,24 @@ function renderTrainingHub() {
       </div>
     `);
     card.querySelector(".apnea-start-btn").addEventListener("click", () => navigate("training-session", { type }));
-    tableCards.appendChild(card);
+    apneaSection.appendChild(card);
   });
+  apneaSection.appendChild(simpleCard({
+    iconName: "breath", titleKey: "diaphragmCardTitle", descKey: "diaphragmCardDesc", btnKey: "diaphragmStartBtn",
+    onClick: () => navigate("training-diaphragm"),
+  }));
+
+  view.querySelector("#section-mobility").append(
+    simpleCard({
+      iconName: "stretch", titleKey: "stretchCardTitle", descKey: "stretchCardDesc", btnKey: "stretchStartBtn",
+      onClick: () => navigate("training-stretch"),
+    }),
+  );
 
   return view;
 }
 
-const BODY_DIAGRAM_SVG = `
+const BODY_DIAGRAM_VERTICAL = `
 <svg viewBox="0 0 120 200" class="body-diagram" aria-hidden="true">
   <path class="body-outline" d="M60 8c-9 0-16 7-16 16v5c-13 4-23 15-25 29l-7 46c-2 13 4 24 15 28v33c0 11 9 20 20 20h26c11 0 20-9 20-20v-33c11-4 17-15 15-28l-7-46c-2-14-12-25-25-29v-5c0-9-7-16-16-16z"/>
   <path class="body-zone zone-shoulders" d="M25 44c11-10 23-15 35-15s24 5 35 15l-5 16c-9-8-19-13-30-13s-21 5-30 13z"/>
@@ -495,67 +532,83 @@ const BODY_DIAGRAM_SVG = `
   <ellipse class="body-zone zone-belly" cx="60" cy="152" rx="28" ry="30"/>
 </svg>`;
 
-function renderBreathingGuide() {
-  const STAGE_DURATION = 3;
-  const stages = [
-    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", zone: "belly", scale: 1.0, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepChest", zone: "chest", scale: 1.25, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", zone: "shoulders", scale: 1.5, duration: STAGE_DURATION },
-    { labelKey: "breathingExhale", stepKey: null, zone: null, scale: 0.75, duration: STAGE_DURATION * 2 },
-    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", zone: "belly", scale: 1.0, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepChest", zone: "chest", scale: 1.25, duration: STAGE_DURATION },
-    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", zone: "shoulders", scale: 1.5, duration: STAGE_DURATION },
-  ];
+const BODY_DIAGRAM_SIDES = `
+<svg viewBox="0 0 120 200" class="body-diagram" aria-hidden="true">
+  <defs>
+    <clipPath id="clip-body-left"><rect x="0" y="0" width="60" height="200"/></clipPath>
+    <clipPath id="clip-body-right"><rect x="60" y="0" width="60" height="200"/></clipPath>
+  </defs>
+  <path class="body-outline" d="M60 8c-9 0-16 7-16 16v5c-13 4-23 15-25 29l-7 46c-2 13 4 24 15 28v33c0 11 9 20 20 20h26c11 0 20-9 20-20v-33c11-4 17-15 15-28l-7-46c-2-14-12-25-25-29v-5c0-9-7-16-16-16z"/>
+  <ellipse class="body-zone zone-left" cx="60" cy="100" rx="36" ry="52" clip-path="url(#clip-body-left)"/>
+  <ellipse class="body-zone zone-right" cx="60" cy="100" rx="36" ry="52" clip-path="url(#clip-body-right)"/>
+</svg>`;
 
+/**
+ * Moteur générique d'un guide de respiration animé par étapes (ballon
+ * qui grossit/rétrécit + schéma du buste optionnel). Réutilisé par le
+ * guide 3 temps, la respiration hémi-costale et la respiration "vague".
+ */
+function renderStageGuide({ titleKey, diagramSVG, stages, loop, doneLabelKey, hintKey }) {
   const view = el(`
     <div>
-      <button class="back-link" id="breathing-back">${t("backToTrainingBtn")}</button>
+      <button class="back-link" id="guide-back">${t("backToTrainingBtn")}</button>
       <div class="card breathing-card">
-        <h2>${icon("breath", "icon-inline")}${t("breathingGuideTitle")}</h2>
+        <h2>${icon("breath", "icon-inline")}${t(titleKey)}</h2>
+        ${hintKey ? `<p>${t(hintKey)}</p>` : ""}
         <div class="breath-stage">
           <div class="breath-visuals">
             <div class="breath-circle-wrap">
-              <div class="breath-circle" id="breath-circle"></div>
+              <div class="breath-circle" id="guide-circle"></div>
             </div>
-            <div class="breath-body-wrap" id="breath-body">${BODY_DIAGRAM_SVG}</div>
+            ${diagramSVG ? `<div class="breath-body-wrap" id="guide-body">${diagramSVG}</div>` : ""}
           </div>
-          <div class="breath-label" id="breath-label"></div>
-          <div class="breath-step" id="breath-step"></div>
+          <div class="breath-label" id="guide-label"></div>
+          <div class="breath-step" id="guide-step"></div>
         </div>
-        <div id="breath-actions" class="breath-actions"></div>
+        <div id="guide-actions" class="breath-actions"></div>
       </div>
     </div>
   `);
-  view.querySelector("#breathing-back").addEventListener("click", () => navigate("training"));
+  view.querySelector("#guide-back").addEventListener("click", () => navigate("training"));
 
-  const circle = view.querySelector("#breath-circle");
-  const bodyWrap = view.querySelector("#breath-body");
-  const labelEl = view.querySelector("#breath-label");
-  const stepEl = view.querySelector("#breath-step");
-  const actionsEl = view.querySelector("#breath-actions");
+  const circle = view.querySelector("#guide-circle");
+  const bodyWrap = view.querySelector("#guide-body");
+  const labelEl = view.querySelector("#guide-label");
+  const stepEl = view.querySelector("#guide-step");
+  const actionsEl = view.querySelector("#guide-actions");
 
   function setActiveZone(zone) {
+    if (!bodyWrap) return;
     bodyWrap.querySelectorAll(".body-zone").forEach((z) => z.classList.remove("active"));
     if (zone) bodyWrap.querySelector(`.zone-${zone}`)?.classList.add("active");
+  }
+
+  function renderStopButton() {
+    actionsEl.innerHTML = `<button class="btn btn-ghost btn-block" id="guide-stop">${t("breathingStopBtn")}</button>`;
+    actionsEl.querySelector("#guide-stop").addEventListener("click", () => navigate("training"));
   }
 
   let stageIndex = 0;
 
   function runStage() {
     if (stageIndex >= stages.length) {
-      labelEl.textContent = t("breathingDone");
-      stepEl.textContent = "";
-      setActiveZone(null);
-      actionsEl.innerHTML = `
-        <button class="btn btn-primary btn-block" id="breath-restart">${t("breathingRestartBtn")}</button>
-        <button class="btn btn-ghost btn-block" id="breath-stop" style="margin-top:8px;">${t("breathingStopBtn")}</button>
-      `;
-      actionsEl.querySelector("#breath-restart").addEventListener("click", () => {
+      if (loop) {
         stageIndex = 0;
-        runStage();
-      });
-      actionsEl.querySelector("#breath-stop").addEventListener("click", () => navigate("training"));
-      return;
+      } else {
+        labelEl.textContent = t(doneLabelKey || "guideDoneGeneric");
+        stepEl.textContent = "";
+        setActiveZone(null);
+        actionsEl.innerHTML = `
+          <button class="btn btn-primary btn-block" id="guide-restart">${t("breathingRestartBtn")}</button>
+          <button class="btn btn-ghost btn-block" id="guide-stop" style="margin-top:8px;">${t("breathingStopBtn")}</button>
+        `;
+        actionsEl.querySelector("#guide-restart").addEventListener("click", () => {
+          stageIndex = 0;
+          runStage();
+        });
+        actionsEl.querySelector("#guide-stop").addEventListener("click", () => navigate("training"));
+        return;
+      }
     }
     const stage = stages[stageIndex];
     circle.style.transitionDuration = `${stage.duration}s`;
@@ -563,8 +616,7 @@ function renderBreathingGuide() {
     labelEl.textContent = t(stage.labelKey);
     stepEl.textContent = stage.stepKey ? t(stage.stepKey) : "";
     setActiveZone(stage.zone);
-    actionsEl.innerHTML = `<button class="btn btn-ghost btn-block" id="breath-stop">${t("breathingStopBtn")}</button>`;
-    actionsEl.querySelector("#breath-stop").addEventListener("click", () => navigate("training"));
+    renderStopButton();
 
     clearActiveInterval();
     activeIntervalId = setTimeout(() => {
@@ -575,6 +627,246 @@ function renderBreathingGuide() {
 
   runStage();
 
+  return view;
+}
+
+function renderBreathingGuide() {
+  const D = 3;
+  const inhaleSteps = [
+    { labelKey: "breathingInhale", stepKey: "breathingStepBelly", zone: "belly", scale: 1.0, duration: D },
+    { labelKey: "breathingInhale", stepKey: "breathingStepChest", zone: "chest", scale: 1.25, duration: D },
+    { labelKey: "breathingInhale", stepKey: "breathingStepShoulders", zone: "shoulders", scale: 1.5, duration: D },
+  ];
+  const stages = [
+    ...inhaleSteps,
+    { labelKey: "breathingExhale", stepKey: null, zone: null, scale: 0.75, duration: D * 2 },
+    ...inhaleSteps,
+  ];
+  return renderStageGuide({
+    titleKey: "breathingGuideTitle",
+    diagramSVG: BODY_DIAGRAM_VERTICAL,
+    stages,
+    loop: false,
+    doneLabelKey: "breathingDone",
+  });
+}
+
+function renderHemiCostalGuide() {
+  const D = 4;
+  const side = (zone, labelKey) => [
+    { labelKey: "breathingInhale", stepKey: labelKey, zone, scale: 1.3, duration: D },
+    { labelKey: "breathingExhale", stepKey: labelKey, zone, scale: 0.8, duration: D },
+  ];
+  const stages = [
+    ...side("left", "hemiLeftLabel"), ...side("left", "hemiLeftLabel"), ...side("left", "hemiLeftLabel"),
+    ...side("right", "hemiRightLabel"), ...side("right", "hemiRightLabel"), ...side("right", "hemiRightLabel"),
+  ];
+  return renderStageGuide({
+    titleKey: "hemiCostalGuideTitle",
+    diagramSVG: BODY_DIAGRAM_SIDES,
+    stages,
+    loop: false,
+    hintKey: "hemiHint",
+  });
+}
+
+function renderWaveBreathing() {
+  const D = 5;
+  const stages = [
+    { labelKey: "breathingInhale", stepKey: null, zone: null, scale: 1.45, duration: D },
+    { labelKey: "breathingExhale", stepKey: null, zone: null, scale: 0.75, duration: D },
+  ];
+  return renderStageGuide({
+    titleKey: "waveGuideTitle",
+    diagramSVG: null,
+    stages,
+    loop: true,
+  });
+}
+
+const DIAPHRAGM_STEPS = [
+  { labelKey: "diaphragmStepFull", n: 1 },
+  { labelKey: "diaphragmStepFull", n: 2 },
+  { labelKey: "diaphragmStepHalf", n: 1 },
+  { labelKey: "diaphragmStepHalf", n: 2 },
+];
+const DIAPHRAGM_RECOVERY = 60;
+
+function renderDiaphragmBalances() {
+  let stepIndex = 0;
+  const holdLog = [];
+  let holdStartMs = 0;
+
+  const view = el(`
+    <div>
+      <button class="back-link" id="dia-back">${t("sessionStopBtn")}</button>
+      <div class="apnea-counter" id="dia-counter"></div>
+      <div class="card" id="dia-card"></div>
+    </div>
+  `);
+  view.querySelector("#dia-back").addEventListener("click", () => navigate("training"));
+
+  function updateCounter() {
+    const step = DIAPHRAGM_STEPS[stepIndex];
+    view.querySelector("#dia-counter").textContent = step ? `${t(step.labelKey)} — ${step.n} ${t("diaphragmRepSuffix")}` : "";
+  }
+
+  function renderReady() {
+    clearActiveInterval();
+    updateCounter();
+    const card = view.querySelector("#dia-card");
+    card.innerHTML = `
+      <h2>${icon("breath", "icon-inline")}${t("diaphragmGuideTitle")}</h2>
+      <p>${t("diaphragmHint")}</p>
+      <button class="btn btn-primary btn-block" id="dia-ready-btn" style="margin-top:10px;">${t("readyHoldBtn")}</button>
+    `;
+    card.querySelector("#dia-ready-btn").addEventListener("click", startHold);
+  }
+
+  function startHold() {
+    holdStartMs = Date.now();
+    const card = view.querySelector("#dia-card");
+    card.innerHTML = `
+      <h2>${icon("timer", "icon-inline")}${t("phaseHoldTitle")}</h2>
+      <div class="apnea-clock" id="dia-hold-clock">0:00</div>
+      <button class="btn btn-primary btn-block" id="dia-stop-hold-btn">${t("stopHoldBtn")}</button>
+    `;
+    card.querySelector("#dia-stop-hold-btn").addEventListener("click", stopHold);
+    clearActiveInterval();
+    activeIntervalId = setInterval(() => {
+      const elapsed = Math.round((Date.now() - holdStartMs) / 1000);
+      const clockEl = document.getElementById("dia-hold-clock");
+      if (clockEl) clockEl.textContent = formatClock(elapsed);
+    }, 250);
+  }
+
+  function stopHold() {
+    clearActiveInterval();
+    holdLog.push(Math.max(0, Math.round((Date.now() - holdStartMs) / 1000)));
+    if (stepIndex < DIAPHRAGM_STEPS.length - 1) {
+      startRecovery(() => {
+        stepIndex++;
+        renderReady();
+      });
+    } else {
+      renderDone();
+    }
+  }
+
+  function startRecovery(onComplete) {
+    let remaining = DIAPHRAGM_RECOVERY;
+    const card = view.querySelector("#dia-card");
+    card.innerHTML = `
+      <h2>${icon("timer", "icon-inline")}${t("phaseRecoveryTitle")}</h2>
+      <div class="apnea-clock" id="dia-recovery-clock">${formatClock(remaining)}</div>
+      <ul class="safety-list">
+        <li>${t("recoveryStep1")}</li>
+        <li>${t("recoveryStep2")}</li>
+        <li>${t("recoveryStep3")}</li>
+      </ul>
+      <div class="apnea-recovery-actions">
+        <button class="btn btn-ghost" id="dia-add-time-btn">${t("addTimeBtn")}</button>
+        <button class="btn btn-primary" id="dia-skip-btn">${t("skipRecoveryBtn")}</button>
+      </div>
+    `;
+    const clockEl = () => document.getElementById("dia-recovery-clock");
+    function finish() {
+      clearActiveInterval();
+      onComplete();
+    }
+    card.querySelector("#dia-add-time-btn").addEventListener("click", () => {
+      remaining += 30;
+      if (clockEl()) clockEl().textContent = formatClock(remaining);
+    });
+    card.querySelector("#dia-skip-btn").addEventListener("click", finish);
+    clearActiveInterval();
+    activeIntervalId = setInterval(() => {
+      remaining--;
+      if (clockEl()) clockEl().textContent = formatClock(Math.max(0, remaining));
+      if (remaining <= 0) finish();
+    }, 1000);
+  }
+
+  function renderDone() {
+    clearActiveInterval();
+    view.querySelector("#dia-counter").textContent = "";
+    const card = view.querySelector("#dia-card");
+    card.innerHTML = `
+      <h2>${t("diaphragmDoneTitle")}</h2>
+      <p>${t("diaphragmDoneBody")}</p>
+      <ul class="safety-list">${holdLog.map((s, i) => `<li>${t("repCounterPrefix")} ${i + 1} : ${formatClock(s)}</li>`).join("")}</ul>
+      <button class="btn btn-primary btn-block" id="dia-back-hub" style="margin-top:12px;">${t("backToTrainingBtn")}</button>
+    `;
+    card.querySelector("#dia-back-hub").addEventListener("click", () => navigate("training"));
+  }
+
+  renderReady();
+  return view;
+}
+
+const STRETCHES = [
+  { nameKey: "stretch1Name", duration: 20 },
+  { nameKey: "stretch2Name", duration: 20 },
+  { nameKey: "stretch3Name", duration: 20 },
+  { nameKey: "stretch4Name", duration: 20 },
+  { nameKey: "stretch5Name", duration: 20 },
+  { nameKey: "stretch6Name", duration: 20 },
+  { nameKey: "stretch7Name", duration: 20 },
+];
+
+function renderChestStretches() {
+  let index = 0;
+  const view = el(`
+    <div>
+      <button class="back-link" id="stretch-back">${t("sessionStopBtn")}</button>
+      <div class="card">
+        <h2>${icon("stretch", "icon-inline")}${t("stretchGuideTitle")}</h2>
+        <p>${t("stretchNote")}</p>
+        <div id="stretch-body"></div>
+      </div>
+    </div>
+  `);
+  view.querySelector("#stretch-back").addEventListener("click", () => navigate("training"));
+  const body = view.querySelector("#stretch-body");
+
+  function renderStep() {
+    clearActiveInterval();
+    if (index >= STRETCHES.length) {
+      body.innerHTML = `
+        <h2 style="margin-top:14px;">${t("stretchDoneTitle")}</h2>
+        <button class="btn btn-primary btn-block" id="stretch-back-hub" style="margin-top:8px;">${t("backToTrainingBtn")}</button>
+      `;
+      body.querySelector("#stretch-back-hub").addEventListener("click", () => navigate("training"));
+      return;
+    }
+    const stretch = STRETCHES[index];
+    let remaining = stretch.duration;
+    body.innerHTML = `
+      <p class="apnea-counter" style="margin-top:14px;">${index + 1} / ${STRETCHES.length}</p>
+      <p style="font-weight:600;">${t(stretch.nameKey)}</p>
+      <div class="apnea-clock" id="stretch-clock">${formatClock(remaining)}</div>
+      <div class="apnea-recovery-actions">
+        <button class="btn btn-ghost" id="stretch-skip-btn">${t("stretchSkip")}</button>
+        <button class="btn btn-primary" id="stretch-next-btn">${t("stretchNextBtn")}</button>
+      </div>
+    `;
+    const clockEl = () => document.getElementById("stretch-clock");
+    function advance() {
+      clearActiveInterval();
+      index++;
+      renderStep();
+    }
+    body.querySelector("#stretch-skip-btn").addEventListener("click", advance);
+    body.querySelector("#stretch-next-btn").addEventListener("click", advance);
+    clearActiveInterval();
+    activeIntervalId = setInterval(() => {
+      remaining--;
+      if (clockEl()) clockEl().textContent = formatClock(Math.max(0, remaining));
+      if (remaining <= 0) advance();
+    }, 1000);
+  }
+
+  renderStep();
   return view;
 }
 
@@ -753,6 +1045,18 @@ function render() {
       break;
     case "training-breathing":
       content = renderBreathingGuide();
+      break;
+    case "training-hemi":
+      content = renderHemiCostalGuide();
+      break;
+    case "training-wave":
+      content = renderWaveBreathing();
+      break;
+    case "training-diaphragm":
+      content = renderDiaphragmBalances();
+      break;
+    case "training-stretch":
+      content = renderChestStretches();
       break;
     case "training-session":
       content = renderApneaSession(state.params);

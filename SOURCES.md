@@ -123,6 +123,23 @@ Wikipedia (dont les articles cités eux-mêmes des références).
   et [NCBI/StatPearls – Shallow Water Blackout](https://www.ncbi.nlm.nih.gov/books/NBK554620/)
   (voir section Physiologie ci-dessus) — cohérent avec la consigne du
   document source de ne jamais hyperventiler avant la première apnée.
+- Balances diaphragmatiques (2x poumons pleins puis 2x à moitié pleins,
+  en position allongée) : même document fourni (V. Perret), exercice
+  « Renforcement muscles respiratoires ».
+- Étirements de la cage thoracique : le principe (assouplir la cage
+  thoracique avant l'apnée) vient du même document, qui renvoie vers
+  une vidéo spécifique (« Étirements apnée pour débutants », Rémy
+  Dubern) dont je n'ai pas le contenu exact. La routine proposée dans
+  l'app est donc une compilation d'étirements généraux du buste/dos
+  largement enseignés (étirement latéral, ouverture thoracique,
+  torsion, chat-vache) — pas une reproduction de cette vidéo précise.
+- Respiration hémi-costale (gauche/droite) et respiration « vague » :
+  ne viennent PAS du document fourni. Ce sont des techniques de
+  respiration générales et largement répandues en préparation
+  respiratoire/relaxation (yoga, préparation à l'apnée), construites
+  ici par connaissance générale plutôt que vérifiées via une source
+  dédiée. Aucune donnée chiffrée sensible n'y est associée (ce ne sont
+  que des rythmes respiratoires de confort).
 - ⚠️ Ces documents ne sont pas des publications académiques publiques :
   ce sont des supports pédagogiques transmis par l'utilisatrice. Le
   contenu a été adapté en version à sec par prudence (pas de

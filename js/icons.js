@@ -37,6 +37,8 @@ const PATHS = {
 
   chevron: `<path d="M7 9.5 12 14.5 17 9.5"/>`,
 
+  stretch: `<circle cx="12" cy="4.3" r="1.8"/><path d="M12 7v7"/><path d="M12 8.2 7 4.3"/><path d="M12 8.2 17 4.3"/><path d="M12 14 8 20.5"/><path d="M12 14 16 20.5"/>`,
+
   timer: `<circle cx="12" cy="13" r="8"/><path d="M12 13 15 10.3"/><path d="M12 3.3V5"/><path d="M9.3 3.3h5.4"/>`,
 
   breath: `<path d="M12 4v5.5"/><circle cx="12" cy="3" r="1" fill="currentColor" stroke="none"/><path d="M12 9.5c-2.2 0-4 2-4 5 0 2.6 1.8 4 4 4s4-1.4 4-4"/>`,
